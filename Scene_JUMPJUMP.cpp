@@ -6,6 +6,7 @@
 #include "PngManager.h"
 #include "MainGame.h"
 #include "SoundMgr.h"
+#include "DH_CPlayer.h"
 
 CScene_JUMPJUMP::CScene_JUMPJUMP()
 {
@@ -25,6 +26,11 @@ void CScene_JUMPJUMP::Enter()
 {
 	m_bChangeScene = false;
 	m_fFade = 1.0f;
+
+	DH_CPlayer* pPlayer = new DH_CPlayer;
+	pPlayer->Initialize();
+	Create_Object(pPlayer, eObjectType::PLAYER);
+
 }
 
 void CScene_JUMPJUMP::Exit()

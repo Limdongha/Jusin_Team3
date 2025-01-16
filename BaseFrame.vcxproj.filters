@@ -124,6 +124,9 @@
     <Filter Include="소스 파일\02.Scene\03.ROUNDROUMD">
       <UniqueIdentifier>{db849b64-9fcb-4d65-9df3-987864f093c4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\03.Object\00.Player\DH_CPlayer">
+      <UniqueIdentifier>{359f2bab-1f67-472a-9baf-4eca80ac5a13}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -270,6 +273,9 @@
     <ClInclude Include="Scene_ROUNDROUND.h">
       <Filter>소스 파일\02.Scene\03.ROUNDROUMD</Filter>
     </ClInclude>
+    <ClInclude Include="DH_CPlayer.h">
+      <Filter>소스 파일\03.Object\00.Player\DH_CPlayer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneMgr.cpp">
@@ -382,6 +388,9 @@
     </ClCompile>
     <ClCompile Include="Scene_ROUNDROUND.cpp">
       <Filter>소스 파일\02.Scene\03.ROUNDROUMD</Filter>
+    </ClCompile>
+    <ClCompile Include="DH_CPlayer.cpp">
+      <Filter>소스 파일\03.Object\00.Player\DH_CPlayer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

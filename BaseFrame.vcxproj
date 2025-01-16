@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="BtnUI.h" />
     <ClInclude Include="Calculation.h" />
+    <ClInclude Include="DH_CPlayer.h" />
     <ClInclude Include="EffectFactory.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectMgr.h" />
@@ -198,6 +199,7 @@
   <ItemGroup>
     <ClCompile Include="BtnUI.cpp" />
     <ClCompile Include="Calculation.cpp" />
+    <ClCompile Include="DH_CPlayer.cpp" />
     <ClCompile Include="EffectFactory.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Effect.cpp" />
