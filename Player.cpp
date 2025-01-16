@@ -36,6 +36,7 @@ m_invincibleTime(0.0f), m_invincibleDuration(3.0f), m_bControl(true),m_StartWalk
 	m_tFrame.iMotion = 0;
 	m_tFrame.dwSpeed = 150;
 	m_tFrame.dwTime = GetTickCount64();
+
 }
 
 CPlayer::~CPlayer()
