@@ -1,0 +1,373 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr">
+      <UniqueIdentifier>{d020117a-59e2-411b-8102-c4dd66497bdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\00.SceneMgr">
+      <UniqueIdentifier>{abf94f73-6029-47a8-9fe2-4a3ebac85570}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\01.KeyMgr">
+      <UniqueIdentifier>{2a1dbdb3-7c42-4795-868f-033485634c37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Scene">
+      <UniqueIdentifier>{8ff532cb-a63e-49b2-bc9f-578e158803f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Scene\00.Scene_Start">
+      <UniqueIdentifier>{fe43b911-c952-440f-97fc-23596309cf54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.Object">
+      <UniqueIdentifier>{68a2d73e-a2e3-4e7d-beb7-cf51e4ce8787}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.Object\00.Player">
+      <UniqueIdentifier>{6271d006-3b63-42e7-a887-64bb1a3118b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\_MainGame">
+      <UniqueIdentifier>{18f93ebc-c0f3-4808-b36e-e63387c8fe0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Setting">
+      <UniqueIdentifier>{47750622-0269-4de1-96b8-71cbf1f765b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\02.ColliderMgr">
+      <UniqueIdentifier>{a3246d5d-075b-4ca3-9008-8ab275175d6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\03.MouseMgr">
+      <UniqueIdentifier>{211649fc-aca4-4471-aba1-236b4623d579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Scene\_BaseClass">
+      <UniqueIdentifier>{4d05b7b3-e6f2-4b0a-ad60-2b289652d32c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.Object\_BaseClass">
+      <UniqueIdentifier>{22f5353f-673b-48e8-afae-36683a5ce7c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\04.ResourceMgr">
+      <UniqueIdentifier>{4feb1f8c-d45a-46ef-9b71-d9edc8459aa2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\04.ResourceMgr\00.Textures">
+      <UniqueIdentifier>{95448d85-117b-45f8-967f-4d0c882e1699}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\04.ResourceMgr\01.Sound">
+      <UniqueIdentifier>{19ae453b-3466-4b20-935e-82683b2d3357}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\04.ResourceMgr\_Base">
+      <UniqueIdentifier>{f5eafd06-8221-435d-ba7d-a5a187aca8c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\05.EventMgr">
+      <UniqueIdentifier>{c4d87511-fe41-46a7-aebe-b4e837bbcc2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Utility">
+      <UniqueIdentifier>{51a6b5fd-e34c-42cb-b980-1a43a4c2bd13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Scene\09.Scene_Tool">
+      <UniqueIdentifier>{ee883ca9-ab39-4cf5-9c1b-b04735ebfa95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\06.ScrollMgr">
+      <UniqueIdentifier>{d32a62d5-1477-4829-adc7-224e052f7e42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\07.TileMgr">
+      <UniqueIdentifier>{f540b842-0ed5-481a-97ae-b88c26feafbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\07.TileMgr\00.Tile">
+      <UniqueIdentifier>{a6c575de-1c1c-4f1a-823f-90f076829acd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\08.PNGMgr">
+      <UniqueIdentifier>{30d7f89d-7063-4a89-b97d-79e253d3c347}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.Object\09.Effect">
+      <UniqueIdentifier>{b8698c83-5cd6-4082-bcb8-83e2ee1883c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\09.EffectMgr">
+      <UniqueIdentifier>{063498e5-9e54-40fa-a88a-4c5eac0cc371}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Scene\00.Rogo">
+      <UniqueIdentifier>{e33052cd-6d08-45a1-a732-4cf16df48825}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\fmod">
+      <UniqueIdentifier>{1edbfd61-63ee-4c82-8960-8b94723fb1ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\10.SoundMgr">
+      <UniqueIdentifier>{9436dafb-23cd-4b2b-8b33-1a59340a68d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\11.UIMgr">
+      <UniqueIdentifier>{74712430-ae56-437a-90b5-0c89d03586b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\11.UIMgr\00.UI">
+      <UniqueIdentifier>{38f38719-ce84-4ec1-ad7f-60276d442a07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\11.UIMgr\01.PanelUI">
+      <UniqueIdentifier>{6619555d-811c-4af3-906b-75266c6cf359}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\11.UIMgr\02.BtnUI">
+      <UniqueIdentifier>{f7d1c95c-01b3-4087-a942-30601fa69df5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.Object\01.Monster">
+      <UniqueIdentifier>{9d42eaac-2040-4abc-a56f-3664d303c6fc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>헤더 파일\Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>헤더 파일\Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일\Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일\Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneMgr.h">
+      <Filter>소스 파일\01.Mgr\00.SceneMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="MainGame.h">
+      <Filter>소스 파일\_MainGame</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Start.h">
+      <Filter>소스 파일\02.Scene\00.Scene_Start</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>소스 파일\03.Object\00.Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>소스 파일\03.Object\01.Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyMgr.h">
+      <Filter>소스 파일\01.Mgr\01.KeyMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseMgr.h">
+      <Filter>소스 파일\01.Mgr\03.MouseMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>소스 파일\02.Scene\_BaseClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>소스 파일\03.Object\_BaseClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Textures.h">
+      <Filter>소스 파일\01.Mgr\04.ResourceMgr\00.Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>소스 파일\01.Mgr\04.ResourceMgr\01.Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Source.h">
+      <Filter>소스 파일\01.Mgr\04.ResourceMgr\_Base</Filter>
+    </ClInclude>
+    <ClInclude Include="ResMgr.h">
+      <Filter>소스 파일\01.Mgr\04.ResourceMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="EventMgr.h">
+      <Filter>소스 파일\01.Mgr\05.EventMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Calculation.h">
+      <Filter>헤더 파일\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Func.h">
+      <Filter>헤더 파일\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
+      <Filter>헤더 파일\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Tool.h">
+      <Filter>소스 파일\02.Scene\09.Scene_Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>소스 파일\01.Mgr\07.TileMgr\00.Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMgr.h">
+      <Filter>소스 파일\01.Mgr\07.TileMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="ScrollMgr.h">
+      <Filter>소스 파일\01.Mgr\06.ScrollMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="MyPng.h">
+      <Filter>소스 파일\01.Mgr\08.PNGMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="PngManager.h">
+      <Filter>소스 파일\01.Mgr\08.PNGMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>소스 파일\03.Object\09.Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectMgr.h">
+      <Filter>소스 파일\01.Mgr\09.EffectMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Rogo.h">
+      <Filter>소스 파일\02.Scene\00.Rogo</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod.hpp">
+      <Filter>헤더 파일\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_codec.h">
+      <Filter>헤더 파일\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_common.h">
+      <Filter>헤더 파일\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp.h">
+      <Filter>헤더 파일\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_dsp_effects.h">
+      <Filter>헤더 파일\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_errors.h">
+      <Filter>헤더 파일\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="fmod_output.h">
+      <Filter>헤더 파일\fmod</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundMgr.h">
+      <Filter>소스 파일\01.Mgr\10.SoundMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="UIMgr.h">
+      <Filter>소스 파일\01.Mgr\11.UIMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>소스 파일\01.Mgr\11.UIMgr\00.UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelUI.h">
+      <Filter>소스 파일\01.Mgr\11.UIMgr\01.PanelUI</Filter>
+    </ClInclude>
+    <ClInclude Include="BtnUI.h">
+      <Filter>소스 파일\01.Mgr\11.UIMgr\02.BtnUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderMgr.h">
+      <Filter>소스 파일\01.Mgr\02.ColliderMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectFactory.h">
+      <Filter>소스 파일\01.Mgr\09.EffectMgr</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SceneMgr.cpp">
+      <Filter>소스 파일\01.Mgr\00.SceneMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="MainGame.cpp">
+      <Filter>소스 파일\_MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Start.cpp">
+      <Filter>소스 파일\02.Scene\00.Scene_Start</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>소스 파일\03.Object\00.Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>소스 파일\03.Object\01.Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyMgr.cpp">
+      <Filter>소스 파일\01.Mgr\01.KeyMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderMgr.cpp">
+      <Filter>소스 파일\01.Mgr\02.ColliderMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseMgr.cpp">
+      <Filter>소스 파일\01.Mgr\03.MouseMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>소스 파일\02.Scene\_BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>소스 파일\03.Object\_BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>소스 파일\_MainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="Textures.cpp">
+      <Filter>소스 파일\01.Mgr\04.ResourceMgr\00.Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>소스 파일\01.Mgr\04.ResourceMgr\01.Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Source.cpp">
+      <Filter>소스 파일\01.Mgr\04.ResourceMgr\_Base</Filter>
+    </ClCompile>
+    <ClCompile Include="ResMgr.cpp">
+      <Filter>소스 파일\01.Mgr\04.ResourceMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="EventMgr.cpp">
+      <Filter>소스 파일\01.Mgr\05.EventMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Calculation.cpp">
+      <Filter>헤더 파일\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Func.cpp">
+      <Filter>헤더 파일\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Tool.cpp">
+      <Filter>소스 파일\02.Scene\09.Scene_Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>소스 파일\01.Mgr\07.TileMgr\00.Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMgr.cpp">
+      <Filter>소스 파일\01.Mgr\07.TileMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="ScrollMgr.cpp">
+      <Filter>소스 파일\01.Mgr\06.ScrollMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="MyPng.cpp">
+      <Filter>소스 파일\01.Mgr\08.PNGMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="PngManager.cpp">
+      <Filter>소스 파일\01.Mgr\08.PNGMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>소스 파일\03.Object\09.Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectMgr.cpp">
+      <Filter>소스 파일\01.Mgr\09.EffectMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Rogo.cpp">
+      <Filter>소스 파일\02.Scene\00.Rogo</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundMgr.cpp">
+      <Filter>소스 파일\01.Mgr\10.SoundMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="UIMgr.cpp">
+      <Filter>소스 파일\01.Mgr\11.UIMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>소스 파일\01.Mgr\11.UIMgr\00.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelUI.cpp">
+      <Filter>소스 파일\01.Mgr\11.UIMgr\01.PanelUI</Filter>
+    </ClCompile>
+    <ClCompile Include="BtnUI.cpp">
+      <Filter>소스 파일\01.Mgr\11.UIMgr\02.BtnUI</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectFactory.cpp">
+      <Filter>소스 파일\01.Mgr\09.EffectMgr</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Jusin02.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="Jusin02.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
