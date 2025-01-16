@@ -4,6 +4,9 @@
 #include "Rogo.h"
 #include "Scene_Start.h"
 #include "Scene_Tool.h"
+#include "Scene_RUNRUN.h"
+#include "Scene_JUMPJUMP.h"
+#include "Scene_ROUNDROUND.h"
 
 CSceneMgr::CSceneMgr() : m_pCurScene(nullptr)
 {
@@ -51,6 +54,19 @@ void CSceneMgr::Initialize()
 
 	m_pArrScene[(ULONG)eSceneType::SCENE_START] = new CScene_Start;
 	m_pArrScene[(ULONG)eSceneType::SCENE_START]->SetName(L"CScene_Start");
+
+
+	//실제 작업공간
+	m_pArrScene[(ULONG)eSceneType::SCENE_RUNRUN] = new CScene_RUNRUN;
+	m_pArrScene[(ULONG)eSceneType::SCENE_RUNRUN]->SetName(L"CScene_RUNRUN");
+
+	m_pArrScene[(ULONG)eSceneType::SCENE_JUMPJUMP] = new CScene_JUMPJUMP;
+	m_pArrScene[(ULONG)eSceneType::SCENE_JUMPJUMP]->SetName(L"CScene_JUMPJUMP");
+
+	m_pArrScene[(ULONG)eSceneType::SCENE_ROUNDROUND] = new CScene_ROUNDROUND;
+	m_pArrScene[(ULONG)eSceneType::SCENE_ROUNDROUND]->SetName(L"CScene_ROUNDROUND");
+
+
 	
 	m_pArrScene[(ULONG)eSceneType::SCENE_TOOL] = new CScene_Tool;
 	m_pArrScene[(ULONG)eSceneType::SCENE_TOOL]->SetName(L"CScene_Tool");
