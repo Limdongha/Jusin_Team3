@@ -115,6 +115,15 @@
     <Filter Include="소스 파일\03.Object\01.Monster">
       <UniqueIdentifier>{9d42eaac-2040-4abc-a56f-3664d303c6fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\02.Scene\01.RUNRUN">
+      <UniqueIdentifier>{99f5ab31-29ee-41ef-8ba2-5e0123f64a1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Scene\02.JUMPJUMP">
+      <UniqueIdentifier>{73004d89-2937-481d-957a-105e6b04ed0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Scene\03.ROUNDROUMD">
+      <UniqueIdentifier>{db849b64-9fcb-4d65-9df3-987864f093c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -252,6 +261,15 @@
     <ClInclude Include="EffectFactory.h">
       <Filter>소스 파일\01.Mgr\09.EffectMgr</Filter>
     </ClInclude>
+    <ClInclude Include="Scene_RUNRUN.h">
+      <Filter>소스 파일\02.Scene\01.RUNRUN</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_JUMPJUMP.h">
+      <Filter>소스 파일\02.Scene\02.JUMPJUMP</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_ROUNDROUND.h">
+      <Filter>소스 파일\02.Scene\03.ROUNDROUMD</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneMgr.cpp">
@@ -355,6 +373,15 @@
     </ClCompile>
     <ClCompile Include="EffectFactory.cpp">
       <Filter>소스 파일\01.Mgr\09.EffectMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_RUNRUN.cpp">
+      <Filter>소스 파일\02.Scene\01.RUNRUN</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_JUMPJUMP.cpp">
+      <Filter>소스 파일\02.Scene\02.JUMPJUMP</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_ROUNDROUND.cpp">
+      <Filter>소스 파일\02.Scene\03.ROUNDROUMD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

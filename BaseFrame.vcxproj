@@ -163,6 +163,9 @@
     <ClInclude Include="PanelUI.h" />
     <ClInclude Include="PngManager.h" />
     <ClInclude Include="Rogo.h" />
+    <ClInclude Include="Scene_JUMPJUMP.h" />
+    <ClInclude Include="Scene_ROUNDROUND.h" />
+    <ClInclude Include="Scene_RUNRUN.h" />
     <ClInclude Include="SoundMgr.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileMgr.h" />
@@ -204,6 +207,9 @@
     <ClCompile Include="PanelUI.cpp" />
     <ClCompile Include="PngManager.cpp" />
     <ClCompile Include="Rogo.cpp" />
+    <ClCompile Include="Scene_JUMPJUMP.cpp" />
+    <ClCompile Include="Scene_ROUNDROUND.cpp" />
+    <ClCompile Include="Scene_RUNRUN.cpp" />
     <ClCompile Include="SoundMgr.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileMgr.cpp" />

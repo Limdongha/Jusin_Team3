@@ -41,6 +41,7 @@ m_invincibleTime(0.0f), m_invincibleDuration(3.0f), m_bControl(true),m_StartWalk
 
 CPlayer::~CPlayer()
 {
+	int a = 0;
 }
 
 //플레이어 그리기
