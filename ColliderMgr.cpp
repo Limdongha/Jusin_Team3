@@ -126,6 +126,11 @@ bool CColliderMgr::KL_CheckCircle(CObject* _Src, CObject* _Dst)
 
 void CColliderMgr::KL_CollisionCircle(CObject* _Src, vector<CObject*> _Dst)
 {
+	if (static_cast<KL_CPlayer*>(_Src)->GetbJump())
+		return;
+
+
+	static_cast<KL_CPlayer*>(_Src)->SetTarget(nullptr);
 	for (auto& Dst : _Dst)
 	{
 		if (KL_CheckCircle(_Src, Dst))
@@ -137,6 +142,9 @@ void CColliderMgr::KL_CollisionCircle(CObject* _Src, vector<CObject*> _Dst)
 			return;
 		}
 	}
+	
+	CSceneMgr::GetInst()->GetCurScene()->DeletePlayerGroup();
+	
 }
 
 

@@ -1,7 +1,8 @@
 #include "pch.h"
 #include "KL_CPlayer.h"
+#include "ScrollMgr.h"
 
-KL_CPlayer::KL_CPlayer() :m_pTarget(nullptr), m_bCol(false), m_bJump(false)
+KL_CPlayer::KL_CPlayer() :m_pTarget(nullptr), m_bCol(false)
 {
 	for (int i = 0; i < 4; ++i)
 	{
@@ -22,79 +23,88 @@ KL_CPlayer::~KL_CPlayer()
 
 void KL_CPlayer::Render()
 {
-	MoveToEx(g_memDC, (int)m_vPoint[0].x, (int)m_vPoint[0].y, nullptr);
+	
+	
+	MoveToEx(g_memDC, int(m_vPoint[0].x + m_tInfo.vPos.x), int(m_vPoint[0].y + m_tInfo.vPos.y), nullptr);
 
 	for (int i = 0; i < 4; ++i)
 	{
-		LineTo(g_memDC, (int)m_vPoint[i].x, (int)m_vPoint[i].y);
+		LineTo(g_memDC, int(m_vPoint[i].x + m_tInfo.vPos.x), int(m_vPoint[i].y + m_tInfo.vPos.y));
 
 		if (i > 0)
 			continue;
 
 		Ellipse(g_memDC,
-			int(m_vPoint[i].x - 5.f),
-			int(m_vPoint[i].y - 5.f),
-			int(m_vPoint[i].x + 5.f),
-			int(m_vPoint[i].y + 5.f));
+			int(m_vPoint[i].x + m_tInfo.vPos.x - 5.f),
+			int(m_vPoint[i].y + m_tInfo.vPos.y - 5.f),
+			int(m_vPoint[i].x + m_tInfo.vPos.x + 5.f),
+			int(m_vPoint[i].y + m_tInfo.vPos.y + 5.f));
 	}
 
-	LineTo(g_memDC, (int)m_vPoint[0].x, (int)m_vPoint[0].y);
+	LineTo(g_memDC, int(m_vPoint[0].x + m_tInfo.vPos.x), int(m_vPoint[0].y + m_tInfo.vPos.y));
 
 	// 포신
 
-	/*MoveToEx(g_memDC, (int)m_tInfo.vPos.x, (int)m_tInfo.vPos.y, nullptr);
-	LineTo(g_memDC, (int)m_vGunPoint.x, (int)m_vGunPoint.y);*/
+	MoveToEx(g_memDC, (int)m_tInfo.vPos.x, (int)m_tInfo.vPos.y, nullptr);
+	LineTo(g_memDC, int(m_vGunPoint.x + m_tInfo.vPos.x), int(m_vGunPoint.y + m_tInfo.vPos.y));
+	
 }
 
 void KL_CPlayer::Update()
 {
-	m_fAngle -= D3DXToRadian(m_fRotateSpeed);
-
-	D3DXMATRIX		matScale, matRotZ, matTrans, matRevZ, matParent;
-
-	D3DXMatrixScaling(&matScale, 1.f, 1.f, 1.f);
-	D3DXMatrixRotationZ(&matRotZ, -m_fAngle);
-	D3DXMatrixRotationZ(&matRevZ, -m_fAngle / 2.f);
-	if(nullptr != m_pTarget)
-		D3DXMatrixTranslation(&matTrans,  - 30, 0.f, 0.f);
-
-	if (m_pTarget != nullptr)
+	
+	if (!GetbJump())
 	{
-		matParent = m_pTarget->GetInfo().matWorld;
-	}
-	
+		if (nullptr != m_pTarget)
+		{
+			
 
-	for (int i = 0; i < 4; ++i)
+			D3DXMATRIX		 matRotZ, matTrans, matRevZ, matParent;
+			m_fAngle -= D3DXToRadian(m_fRotateSpeed * 30);
 
-	{
-		m_vPoint[i] = m_vOriginPoint[i];
+			D3DXMatrixRotationZ(&matRotZ, -D3DXToRadian(m_fAngle));
+
+			D3DXMatrixRotationZ(&matRevZ, -D3DXToRadian(m_fAngle) );
+			
+			D3DXMatrixTranslation(&matTrans, -m_pTarget->GetInfo().vPos.x, -m_pTarget->GetInfo().vPos.y, 0.f);
+
+			D3DXMatrixTranslation(&matParent, m_pTarget->GetInfo().vPos.x, m_pTarget->GetInfo().vPos.y, 0.f);
 		
-		
+			m_tInfo.matWorld =  matTrans * matRevZ * matParent;
 
-		m_tInfo.matWorld = matScale * matTrans * matRevZ * matParent;
-	
 
-		D3DXVec3TransformCoord(&m_vPoint[i], &m_vOriginPoint[i], &m_tInfo.matWorld);
+			for (int i = 0; i < 4; ++i)
+			{
+				D3DXVec3TransformNormal(&m_vPoint[i], &m_vOriginPoint[i], &m_tInfo.matWorld);
+			}
+
+			
+
+			D3DXVec3TransformCoord(&m_tInfo.vPos, &m_vOriginPos, &m_tInfo.matWorld);
+
+			m_tInfo.matWorld = matRotZ * matTrans * matRevZ * matParent;
+
+			D3DXVec3TransformNormal(&m_vGunPoint, &m_vOriginGunPoint, &m_tInfo.matWorld);
+
+
+
+
+			m_tInfo.vDir = m_vGunPoint / 40.f;
+
+
+
+		}
 	}
 
-	
-
-	m_tInfo.matWorld = matScale * matRotZ  * matRevZ * matParent;
-	// 포신
-	m_vGunPoint = m_vOriginGunPoint;
+	else
+ 		JumpIng();
 
 	
-	
-
-	D3DXVec3TransformCoord(&m_vGunPoint, &m_vOriginGunPoint, &m_tInfo.matWorld);
-	
-
-	KeyInput();
 }
 
 void KL_CPlayer::Initialize()
 {
-	m_tInfo.vPos = { 375.f, 300.f, 0.f };
+	m_tInfo.vPos = { 300.f, 300.f, 0.f };
 	SetfSpeed(3.f);
 	m_tInfo.vLook = { 0.f, -1.f, 0.f };
 
@@ -118,13 +128,16 @@ void KL_CPlayer::Initialize()
 void KL_CPlayer::LateUpdate()
 {
 
+	KeyInput();
+
+	Offset();
 }
 
 void KL_CPlayer::KeyInput()
 {
 	if (GetAsyncKeyState(VK_SPACE))
 	{
-		m_bJump = true;
+		SetbJump(true);
 
 	}
 }
@@ -135,9 +148,38 @@ void KL_CPlayer::Change_Motion()
 
 void KL_CPlayer::Offset()
 {
+	int		iOffSetminX = 200;
+	int		iOffSetmaxX = 400;
+	
 
+	
+		int		iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+
+		if (iOffSetminX > m_vOriginPos.x + iScrollX)
+			CScrollMgr::Get_Instance()->Add_ScrollX(5.f);
+
+		if (iOffSetmaxX < m_vOriginPos.x + iScrollX)
+			CScrollMgr::Get_Instance()->Add_ScrollX(-5.f);
+
+
+	
 }
 
 void KL_CPlayer::JumpIng()
 {
+	AddfTime(0.2f);
+
+	m_tInfo.vPos += m_tInfo.vDir * 10;
+	
+	
+
+	if (GetfTime() > 2.f)
+	{
+		m_vOriginPos = m_tInfo.vPos;
+
+		SetbJump(false);
+		SetfTime(0.f);
+	}
+		
+
 }

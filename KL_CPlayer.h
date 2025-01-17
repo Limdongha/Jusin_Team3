@@ -21,11 +21,13 @@ public:
 	void			Offset();
 	void			JumpIng();
 	void			SetTarget(CObject* _pObj) { m_pTarget = _pObj; }
+	
 
-	bool        m_bJump;
+
 	bool        m_bCol;
 
 private:
+	// point를 normal로 해서 이동 안먹히게, pos만 계속 이동하는 식으로
 	D3DXVECTOR3     m_vPoint[4];
 	D3DXVECTOR3     m_vOriginPoint[4];
 

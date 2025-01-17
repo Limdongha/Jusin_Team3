@@ -404,26 +404,18 @@ void CPlayer::Offset()
 {
 	int		iOffSetminX = 200;
 	int		iOffSetmaxX = 400;
-	int		iOffSetminY = 350;
-	int		iOffSetmaxY = 500;
 
 	if (!CScrollMgr::Get_Instance()->GetbShake01())
 	{
 		int		iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 
 		if (iOffSetminX > GetPos().fX + iScrollX)
-			CScrollMgr::Get_Instance()->Add_ScrollX(m_fSpeed);
+			CScrollMgr::Get_Instance()->Add_ScrollX(5.f);
 
 		if (iOffSetmaxX < GetPos().fX + iScrollX)
-			CScrollMgr::Get_Instance()->Add_ScrollX(-m_fSpeed);
+			CScrollMgr::Get_Instance()->Add_ScrollX(-5.f);
 
-		int		iScrollY = (int)CScrollMgr::Get_Instance()->Get_ScrollY();
-
-		if (iOffSetminY > GetPos().fY + iScrollY)
-			CScrollMgr::Get_Instance()->Add_ScrollY(m_fSpeed);
-
-		if (iOffSetmaxY < GetPos().fY + iScrollY)
-			CScrollMgr::Get_Instance()->Add_ScrollY(-m_fSpeed);
+	
 	}
 }
 
