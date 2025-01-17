@@ -177,6 +177,7 @@ void KL_CPlayer::JumpIng()
 	{
 		m_vOriginPos = m_tInfo.vPos;
 
+		m_fAngle = 0.f;
 		SetbJump(false);
 		SetfTime(0.f);
 	}
