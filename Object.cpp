@@ -13,8 +13,9 @@ CObject::CObject() :
 	m_pCurPNG(nullptr), m_pLeftPNG(nullptr), m_pRightPNG(nullptr), m_fGravity(3.6f), m_bDoubleJump(false),
 	m_ePreEffect(eEffectName::END), m_eCurEffect(eEffectName::END), m_eRender(RENDERID::RENDER_END),
 	m_iHP(100), m_fSpeed(3.0f), m_fCusDeltaTime(0.667f), m_fRealDeltaTime(0.01667f), m_iDieTime(4),
-	m_bDie(false), m_fCurve(0.f), m_fCurve2(0.f), m_fDoubleCurve(0.f), m_bJumpSwitch(false), m_bMoveFrame(true)
+	m_bDie(false), m_fCurve(0.f), m_fCurve2(0.f), m_fDoubleCurve(0.f), m_bJumpSwitch(false), m_bMoveFrame(true), m_fRotateSpeed(0.f), m_fAngle(0.f)
 {
+	ZeroMemory(&m_tInfo, sizeof(m_tInfo));
 }										   
 
 CObject::~CObject()

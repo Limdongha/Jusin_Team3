@@ -39,6 +39,10 @@ public:
 	bool		GetbCollisionCooldown() { return m_bCollisionCooldown; }
 	bool		GetbPlayerDead() { return m_bPlayerDead; }
 
+public:
+	bool		KL_CheckCircle(CObject* _Src, CObject* _Dst);
+	void		KL_CollisionCircle(CObject* _Src, vector <CObject*> _Dst);
+
 private:
 	float		m_Gravity;
 	float		m_fTime;

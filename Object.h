@@ -44,6 +44,7 @@ public:
 	eEffectName			GetCurEffect()		{ return m_eCurEffect; }
 	bool				GetbJumpSwitch()	{ return m_bJumpSwitch; }
 	bool				GetbMoveFrame()		{ return m_bMoveFrame; }
+	float				GetfRotateSpeed()	{ return m_fRotateSpeed; }
 
 public:
 	
@@ -73,6 +74,8 @@ public:
 	void		SetfCure2(float _Curve)			{ m_fCurve2 = _Curve; }
 	void		SetbJumpSwitch(bool _Switch)	{ m_bJumpSwitch = _Switch; }
 	void		SetbMoveFrame(bool _Frame)		{ m_bMoveFrame = _Frame; }
+	void		SetRotateSpeed(float _RotateSpeed) { m_fRotateSpeed = _RotateSpeed; }
+	void		SetPosVector(float _X, float _Y) { m_tInfo.vPos = { _X, _Y, 0.f }; }
 
 public:
 	
@@ -188,5 +191,13 @@ protected:
 
 	//·»´õ·¹ÀÌ¾î
 	RENDERID			m_eRender;
+
+protected:
+	INFO m_tInfo;
+	float m_fRotateSpeed;
+	float m_fAngle;
+
+public:
+	INFO& GetInfo() { return m_tInfo; }
 };
 

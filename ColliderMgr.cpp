@@ -16,6 +16,8 @@
 #include "SoundMgr.h"
 #include "Effect.h"
 #include "DH_CPlayer.h"
+#include "KL_CPlayer.h"
+#include "CJumpPad.h"
 
 CColliderMgr::CColliderMgr() : m_Gravity(9.8f), m_fTime(0), m_bEffectCreated(false), m_bPlayerDead(false),
 m_bJumpLimit(false), m_bSound(false), m_SoundStart(0), m_bCollisionCooldown(true)
@@ -28,7 +30,7 @@ CColliderMgr::~CColliderMgr()
 
 void CColliderMgr::Update()
 {
-	//ÇöÀç¾ÀÀÇ ¿ÀºêÁ§Æ® ±×·ì
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½×·ï¿½
 	auto& player = CSceneMgr::GetInst()->GetCurScene()->GetvSceneObj()[(int)eObjectType::PLAYER];
 	auto& monsters = CSceneMgr::GetInst()->GetCurScene()->GetvSceneObj()[(int)eObjectType::MONSTER];
 	auto& Tiles = CSceneMgr::GetInst()->GetCurScene()->GetvSceneObj()[(int)eObjectType::TILE];
@@ -39,22 +41,22 @@ void CColliderMgr::Update()
 }
 
 
-//·ºÆ®EX ¹Ð¾î³»±â
+//ï¿½ï¿½Æ®EX ï¿½Ð¾î³»ï¿½ï¿½
 bool CColliderMgr::Check_Rect(CObject* _player, CObject* _mob, float* _fX, float* _fY)
 {
-	//¸Å°³º¯¼ö : µÎ ¿ÀºêÁ§Æ®ÀÇ ¹Ý´ë·Î °¡ÇØÁú Èû°ª
+	//ï¿½Å°ï¿½ï¿½ï¿½ï¿½ï¿½ : ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ý´ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	
-	// µÎ ¹°Ã¼°£ÀÇ ¹Øº¯, ³ôÀÌ
+	// ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½Øºï¿½, ï¿½ï¿½ï¿½ï¿½
 	float fX = abs(_player->GetPos().fX - _mob->GetPos().fX);
 	float fY = abs(_player->GetPos().fY - _mob->GetPos().fY);
-	// µÎ ¹°Ã¼ÀÇ ¹ÝÁö¸§À» °¢°¢ ´õÇÑ °ª
+	// ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	float fScaleX = (_player->GetScale().fX + _mob->GetScale().fX) * 0.5f;
 	float fScaleY = (_player->GetScale().fY + _mob->GetScale().fY) * 0.5f;
 
-	// µÎ ¹°Ã¼°¡ °ãÃÆÀ» ¶§
+	// ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	if (fScaleX > fX && fScaleY > fY)
 	{
-		// ¹Ð¾î³»´Â ÈûÀ» ¼ÂÆÃ
+		// ï¿½Ð¾î³»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		*_fX = fScaleX - fX;
 		*_fY = fScaleY - fY;
 		return true;
@@ -63,27 +65,27 @@ bool CColliderMgr::Check_Rect(CObject* _player, CObject* _mob, float* _fX, float
 }
 void CColliderMgr::CollisionEx(vector<CObject*> _Dst, vector<CObject*> _Src)
 {
-	//µÎ ±×·ìÀ» ¼øÈ¸ (_Dst °¡ ¹Ð·Á³ª´Â ±×·ì)
+	//ï¿½ï¿½ ï¿½×·ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ (_Dst ï¿½ï¿½ ï¿½Ð·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×·ï¿½)
 	float	fX(0.f), fY(0.f);
 
 	for (auto& Dst : _Dst)
 	{
 		for (auto& Src : _Src)
 		{
-			//°ãÄ¡´ÂÁö È®ÀÎ
+			//ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 			if (Check_Rect(Dst, Src, &fX, &fY))
 			{
-				// »ó ÇÏ Ãæµ¹
+				// ï¿½ï¿½ ï¿½ï¿½ ï¿½æµ¹
 				if (fX > fY)
 				{
-					// ÇÏ Ãæµ¹
+					// ï¿½ï¿½ ï¿½æµ¹
 					if (Dst->GetPos().fY - Dst->GetScale().fY / 2 <= Src->GetPos().fY + Src->GetScale().fY / 2 &&
 						Dst->GetPos().fY - Dst->GetScale().fY / 2 > Src->GetPos().fY - Src->GetScale().fY / 2)
 					{
-						// ÇÏÃæµ¹½Ã
+						// ï¿½ï¿½ï¿½æµ¹ï¿½ï¿½
 					}
 
-					// »ó Ãæµ¹
+					// ï¿½ï¿½ ï¿½æµ¹
 					else
 					{
 						Dst->SetPos(tVec2{
@@ -94,15 +96,15 @@ void CColliderMgr::CollisionEx(vector<CObject*> _Dst, vector<CObject*> _Src)
 					}
 				}
 
-				// ÁÂ ¿ì Ãæµ¹
+				// ï¿½ï¿½ ï¿½ï¿½ ï¿½æµ¹
 				else
 				{
-					// ÁÂ Ãæµ¹
+					// ï¿½ï¿½ ï¿½æµ¹
 					if (Dst->GetPos().fX < Src->GetPos().fX)
 					{
 						//Dst->AddPos(tVec2{ -fX, 0 });
 					}
-					// ¿ì Ãæµ¹
+					// ï¿½ï¿½ ï¿½æµ¹
 					else
 					{
 						//Dst->AddPos(tVec2{ fX, 0 });
@@ -113,19 +115,53 @@ void CColliderMgr::CollisionEx(vector<CObject*> _Dst, vector<CObject*> _Src)
 	}
 };
 
+bool CColliderMgr::KL_CheckCircle(CObject* _Src, CObject* _Dst)
+{
+	D3DXVECTOR3 temp = _Dst->GetInfo().vPos - _Src->GetInfo().vPos;
 
-//¿øÃæµ¹
+	float fRadius = 70.f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+
+	float fDiagonal = D3DXVec3Length(&temp); // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½
+
+	return fRadius >= fDiagonal;
+}
+
+void CColliderMgr::KL_CollisionCircle(CObject* _Src, vector<CObject*> _Dst)
+{
+	if (static_cast<KL_CPlayer*>(_Src)->GetbJump())
+		return;
+
+
+	static_cast<KL_CPlayer*>(_Src)->SetTarget(nullptr);
+	for (auto& Dst : _Dst)
+	{
+		if (KL_CheckCircle(_Src, Dst))
+		{
+			(_Src)->SetRotateSpeed(Dst->GetfRotateSpeed());
+
+			static_cast<KL_CPlayer*>(_Src)->SetTarget(Dst);
+			
+			return;
+		}
+	}
+	
+	CSceneMgr::GetInst()->GetCurScene()->DeletePlayerGroup();
+	
+}
+
+
+//ï¿½ï¿½ï¿½æµ¹
 bool CColliderMgr::CollisionCircle(CObject* lhs, CObject* rhs, float _ScrollX, float _ScrollY)
 {
 	float radiusObj = lhs->GetScale().fX * 0.5f;
 	float radiusObj1 = rhs->GetScale().fY * 0.5f;
 
-	float collisionDis = radiusObj + radiusObj1; // µÎ ¿ÀºêÁ§Æ®ÀÇ ¹ÝÁö¸§ ´õÇÑ °ª(Ãæµ¹ ±âÁØ °Å¸®)
+	float collisionDis = radiusObj + radiusObj1; // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½(ï¿½æµ¹ ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½)
 
 	float x1 = lhs->GetPos().fX + _ScrollX, x2 = rhs->GetPos().fX + _ScrollX;
 	float y1 = lhs->GetPos().fY + _ScrollY, y2 = rhs->GetPos().fY + _ScrollY;
 
-	// °¢ ¿ÀºêÁ§Æ®ÀÇ ÁßÁ¡ ±âÁØ ÁÂÇ¥ °Å¸® °è»ê
+	// ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½
 	float dx = y2 - y1;
 	float dy = x2 - x1;
 	float squareDeltaDis = dx * dx + dy * dy;
@@ -133,14 +169,14 @@ bool CColliderMgr::CollisionCircle(CObject* lhs, CObject* rhs, float _ScrollX, f
 	return (collisionDis * collisionDis) >= squareDeltaDis;
 }
 
-//Áß·ÂÀû¿ë ÇÔ¼ö
+//ï¿½ß·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 void CColliderMgr::PlayerGravityEx(vector<CObject*> _ObjectGroup)
 {
-	const float MAX_GRAVITY = 25.f; // ÃÖ´ë Áß·Â °¡¼Óµµ °ª ¼³Á¤
+	const float MAX_GRAVITY = 25.f; // ï¿½Ö´ï¿½ ï¿½ß·ï¿½ ï¿½ï¿½ï¿½Óµï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 	for (CObject* Object : _ObjectGroup)
 	{
-		// Falling ÇÒ ¶§¸¸
+		// Falling ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		if (Object->GetbFalling() && !Object->GetbJump() && !Object->GetbDoubleJump())
 		{
 			if (dynamic_cast<CPlayer*>(Object)->GetbJumpAttack())
@@ -150,24 +186,24 @@ void CColliderMgr::PlayerGravityEx(vector<CObject*> _ObjectGroup)
 			
 			m_fTime += 0.2f;
 
-			// Áß·Â °è»ê
+			// ï¿½ß·ï¿½ ï¿½ï¿½ï¿½
 			Object->SetfCure2((9.8f * m_fTime * m_fTime) * 0.5f);
 
-			// Áß·Â Á¦ÇÑ Àû¿ë
+			// ï¿½ß·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			if (Object->GetfCurve2() > MAX_GRAVITY)
 				Object->SetfCure2(MAX_GRAVITY);
 
-			//Falling Á¶°Ç
+			//Falling ï¿½ï¿½ï¿½ï¿½
 			if (!dynamic_cast<CPlayer*>(Object)->GetbJumpAttack())
 			{
 				Object->SeteState(STATE::FALLING);
 			}
 
-			// Áß·Â Àû¿ë
+			// ï¿½ß·ï¿½ ï¿½ï¿½ï¿½ï¿½
 			Object->AddPos(tVec2{ 0, Object->GetfCurve2() });
 		}
 
-		//Á¡ÇÁÇÏ´Â°Íµµ ¾Æ´Ï°í ¶³¾îÁö´Â °Íµµ ¾Æ´Ò ¶§
+		//ï¿½ï¿½ï¿½ï¿½ï¿½Ï´Â°Íµï¿½ ï¿½Æ´Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Íµï¿½ ï¿½Æ´ï¿½ ï¿½ï¿½
 		else if (!Object->GetbFalling() && !Object->GetbJump())
 		{
 			m_fTime = 0.f;
@@ -182,23 +218,23 @@ void CColliderMgr::PlayerGravityEx(vector<CObject*> _ObjectGroup)
 }
 void CColliderMgr::ObjectGravityEx(vector<CObject*> _ObjectGroup)
 {
-	const float MAX_GRAVITY = 25.f; // ÃÖ´ë Áß·Â °¡¼Óµµ °ª ¼³Á¤
+	const float MAX_GRAVITY = 25.f; // ï¿½Ö´ï¿½ ï¿½ß·ï¿½ ï¿½ï¿½ï¿½Óµï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 	for (CObject* Object : _ObjectGroup)
 	{
-		// Falling ÇÒ ¶§¸¸
+		// Falling ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		if (Object->GetbFalling())
 		{
 			Object->AddfTime(0.4f);
 			
-			// Áß·Â °è»ê
+			// ï¿½ß·ï¿½ ï¿½ï¿½ï¿½
 			Object->SetfCure2((9.8f * Object->GetfTime() * Object->GetfTime()) * 0.5f);
 			
-			// Áß·Â Á¦ÇÑ Àû¿ë
+			// ï¿½ß·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			if (Object->GetfCurve2() > MAX_GRAVITY)
 				Object->SetfCure2(MAX_GRAVITY);
 
-			// Áß·Â Àû¿ë
+			// ï¿½ß·ï¿½ ï¿½ï¿½ï¿½ï¿½
 			Object->AddPos(tVec2{ 0, Object->GetfCurve2()});
 
 			if (Object->GetPos().fY + Object->GetScale().fY / 2 >= Object->GetpCurTile()->GetPos().fY - Object->GetpCurTile()->GetScale().fY / 2)
@@ -207,7 +243,7 @@ void CColliderMgr::ObjectGravityEx(vector<CObject*> _ObjectGroup)
 				Object->SetfGravity(3.6f);
 			}
 		}
-		//Falling ÀÌ ¾Æ´Ò¶§
+		//Falling ï¿½ï¿½ ï¿½Æ´Ò¶ï¿½
 		else
 		{
 			Object->SetfTime(0.f);
@@ -215,30 +251,30 @@ void CColliderMgr::ObjectGravityEx(vector<CObject*> _ObjectGroup)
 	}
 }
 
-//Ä¿·±Æ® Å¸ÀÏ ÁöÁ¤
+//Ä¿ï¿½ï¿½Æ® Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 void CColliderMgr::GetCurObjectTile(vector<CObject*> _ObjectGroup)
 {
 	auto& Tiles = CSceneMgr::GetInst()->GetCurScene()->GetvSceneObj()[(int)eObjectType::TILE];
 
-	//¿ÀºêÁ§Æ® ¼øÈ¸
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½È¸
 	for (CObject* Object : _ObjectGroup)
 	{
-		//Å¸ÀÏ¼øÈ¸
+		//Å¸ï¿½Ï¼ï¿½È¸
 		for (CObject* Tile : Tiles)
 		{
-			//Á¶°Ç 1.  xÀÇ °ªÀÌ »óÀÚ ¹üÀ§ ¾È¿¡ ÀÖÀ» ¶§ Ä¿·±Æ® ¶óÀÎ¹éÅÍ Ãß°¡
+			//ï¿½ï¿½ï¿½ï¿½ 1.  xï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½È¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Ä¿ï¿½ï¿½Æ® ï¿½ï¿½ï¿½Î¹ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
 			if (CheckXRange(Tile, Object))
 			{
 				Object->SetvCurTileList(Tile);
 			}
 		}
-		//Å¸ÀÏ¹éÅÍ¿¡ 1°³ ÀÌ»óÀÇ °ªÀÌ µé¾î¿À¸é Á¦ÀÏ °¡±î¿î Ä¿·±Æ®Å¸ÀÏ·Î ÁöÁ¤
+		//Å¸ï¿½Ï¹ï¿½ï¿½Í¿ï¿½ 1ï¿½ï¿½ ï¿½Ì»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½Æ®Å¸ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½
 		if ((*Object).GetvCurTileList()->size() > 1)
 		{
 			SetClosestTile(Object, *Object->GetvCurTileList());
 			(*Object).GetvCurTileList()->clear();
 		}
-		//Å¸ÀÏ¹éÅÍ¿¡ 1°³ÀÇ °ªÀÌ ÀÖÀ¸¸é Ä¿·±Æ®Å¸ÀÏ·Î ÁöÁ¤
+		//Å¸ï¿½Ï¹ï¿½ï¿½Í¿ï¿½ 1ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½Æ®Å¸ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½
 		else if ((*Object).GetvCurTileList()->size() == 1)
 		{
 			Object->SetpCurTile((*Object).GetvCurTileList()->front());
@@ -247,11 +283,11 @@ void CColliderMgr::GetCurObjectTile(vector<CObject*> _ObjectGroup)
 	}
 }
 
-//Falling ÀÌ ÄÑÁö´Â Á¶°Ç
+//Falling ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 void CColliderMgr::GravityCondition(vector<CObject*> _ObjectGroup, vector<CObject*> _Tiles)
 {
-	//¿©±â¼­´Â Falling À» Å°°í ²ô´Â°Ô ¸ñÇ¥
-	//Á¶°Ç 2.  ÇÃ·¹ÀÌ¾îÀÇ y°ªÀÌ ¹ßÆÇÀÇ y°ªº¸´Ù ÀÛÀ» ¶§(´õ ³ôÀ½) >> ±âÁØÀ» ÇÃ·¹ÀÌ¾î ¹ß ÁÂÇ¥±âÁØ
+	//ï¿½ï¿½ï¿½â¼­ï¿½ï¿½ Falling ï¿½ï¿½ Å°ï¿½ï¿½ ï¿½ï¿½Â°ï¿½ ï¿½ï¿½Ç¥
+	//ï¿½ï¿½ï¿½ï¿½ 2.  ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ yï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½(ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½) >> ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ï¿½ï¿½
 	for (auto& Object : _ObjectGroup)
 	{
 		float playerY = Object->GetPos().fY + Object->GetScale().fY / 2;
@@ -272,7 +308,7 @@ void CColliderMgr::GravityCondition(vector<CObject*> _ObjectGroup, vector<CObjec
 			Object->SetbJumpSwitch(false);
 		}
 	}
-	//Á¶°Ç 5.  ÇöÀç ¹â°íÀÖ´Â ¹Ú½ºÀÇ ¿À¸¥ÂÊÀÌ³ª ¿ÞÂÊ¿¡ ¹Ú½º°¡ ¾øÀ» ¶§ && ÇöÀç ¹â°íÀÖ´Â ¹Ú½º ³¡¿¡ °¬À» ¶§
+	//ï¿½ï¿½ï¿½ï¿½ 5.  ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì³ï¿½ ï¿½ï¿½ï¿½Ê¿ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ && ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	auto& TileList = _Tiles;
 
 	for (auto& Object : _ObjectGroup)
@@ -281,18 +317,18 @@ void CColliderMgr::GravityCondition(vector<CObject*> _ObjectGroup, vector<CObjec
 		{
 			auto& Tile = *it;
 
-			//ÇöÀç ¹â°í ÀÖ´Â Å¸ÀÏ
+			//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ Å¸ï¿½ï¿½
 			if (Object->GetpCurTile() == *it)
 			{
-				//´ÙÀ½ Å¸ÀÏ
+				//ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½
 				auto nextIt = next(it);
 				if (nextIt != TileList.end())
 				{
-					//ÇöÀç Å¸ÀÏÀÌ ´ÙÀ½Å¸ÀÏÀÇ y°ªº¸´Ù ÀÛÀ» ¶§
+					//ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 					auto& nextTile = *nextIt;
 					if (Object->GetpCurTile()->GetPos().fY < nextTile->GetPos().fY)
 					{
-						//¿ÀºêÁ§Æ®ÀÇ x °ªÀÌ Áö±ÝÅ¸ÀÏÀÇ xº¸´Ù Å©¸é ³«ÇÏ
+						//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ x ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ xï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 						if (Object->GetPos().fX >= Object->GetpCurTile()->GetPos().fX + Object->GetpCurTile()->GetScale().fX / 2)
 						{
 							Object->SetbFalling(true);
@@ -300,45 +336,45 @@ void CColliderMgr::GravityCondition(vector<CObject*> _ObjectGroup, vector<CObjec
 					}
 
 				}
-				//´ÙÀ½ Å¸ÀÏÀÌ ¾øÀ» ¶§
-				bool isGreater = true; // ¸ðµç Å¸ÀÏº¸´Ù Å«Áö ¿©ºÎ
+				//ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+				bool isGreater = true; // ï¿½ï¿½ï¿½ Å¸ï¿½Ïºï¿½ï¿½ï¿½ Å«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 				for (const auto& tile : TileList)
 				{
 					if (Object->GetpCurTile()->GetPos().fX < tile->GetPos().fX)
 					{
 						isGreater = false;
-						break; // Á¶°ÇÀÌ ¸¸Á·ÇÏÁö ¾ÊÀ¸¸é Áß´Ü
+						break; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß´ï¿½
 					}
 				}
 
 				if (isGreater)
 				{
-					//¿ÀºêÁ§Æ®ÀÇ x °ªÀÌ Áö±ÝÅ¸ÀÏÀÇ xº¸´Ù Å©¸é ³«ÇÏ
+					//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ x ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ xï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 					if (Object->GetPos().fX - Object->GetScale().fX/2 > Object->GetpCurTile()->GetPos().fX + Object->GetpCurTile()->GetScale().fX / 2)
 					{
 						Object->SetbFalling(true);
 					}
 				}
 
-				//ÀÌÀü Å¸ÀÏ
+				//ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½
 				if (it != TileList.begin())
 				{
 					auto prevIt = prev(it);
 					auto& prevTile = *prevIt;
-					//ÇöÀç Å¸ÀÏÀÌ ´ÙÀ½Å¸ÀÏÀÇ y°ªº¸´Ù ÀÛÀ» ¶§
+					//ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 					if (Object->GetpCurTile()->GetPos().fY < prevTile->GetPos().fY)
 					{
-						//¿ÀºêÁ§Æ®ÀÇ x °ªÀÌ ÀÌÀüÅ¸ÀÏº¸´Ù Å©¸é ³«ÇÏ
+						//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ x ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¸ï¿½Ïºï¿½ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 						if (Object->GetPos().fX <= Object->GetpCurTile()->GetPos().fX - Object->GetpCurTile()->GetScale().fX / 2)
 						{
 							Object->SetbFalling(true);
 						}
 					}
 				}
-				//ÀÌÀü Å¸ÀÏÀÌ ¾øÀ» ¶§
+				//ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 				else if (it == TileList.begin())
 				{
-					//¿ÀºêÁ§Æ®ÀÇ x °ªÀÌ ÀÌÀüÅ¸ÀÏº¸´Ù Å©¸é ³«ÇÏ
+					//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ x ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¸ï¿½Ïºï¿½ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 					if (Object->GetPos().fX <= Object->GetpCurTile()->GetPos().fX - Object->GetpCurTile()->GetScale().fX / 2)
 					{
 						Object->SetbFalling(true);
@@ -350,9 +386,9 @@ void CColliderMgr::GravityCondition(vector<CObject*> _ObjectGroup, vector<CObjec
 }
 void CColliderMgr::GravityCondition(CObject* _ObjectGroup, vector<CObject*> _Tiles)
 {
-	//¿©±â¼­´Â Falling À» Å°°í ²ô´Â°Ô ¸ñÇ¥
+	//ï¿½ï¿½ï¿½â¼­ï¿½ï¿½ Falling ï¿½ï¿½ Å°ï¿½ï¿½ ï¿½ï¿½Â°ï¿½ ï¿½ï¿½Ç¥
 
-	//Á¶°Ç 2.  ÇÃ·¹ÀÌ¾îÀÇ y°ªÀÌ ¹ßÆÇÀÇ y°ªº¸´Ù ÀÛÀ» ¶§(´õ ³ôÀ½) >> ±âÁØÀ» ÇÃ·¹ÀÌ¾î ¹ß ÁÂÇ¥±âÁØ
+	//ï¿½ï¿½ï¿½ï¿½ 2.  ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ yï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½(ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½) >> ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ï¿½ï¿½
 
 	float playerY = _ObjectGroup->GetPos().fY + _ObjectGroup->GetScale().fY / 2;
 	float TileY = _ObjectGroup->GetpCurTile()->GetPos().fY - _ObjectGroup->GetpCurTile()->GetScale().fY / 2;
@@ -365,25 +401,25 @@ void CColliderMgr::GravityCondition(CObject* _ObjectGroup, vector<CObject*> _Til
 	{
 		_ObjectGroup->SetbFalling(false);
 	}
-	//Á¶°Ç 5.  ÇöÀç ¹â°íÀÖ´Â ¹Ú½ºÀÇ ¿À¸¥ÂÊÀÌ³ª ¿ÞÂÊ¿¡ ¹Ú½º°¡ ¾øÀ» ¶§ && ÇöÀç ¹â°íÀÖ´Â ¹Ú½º ³¡¿¡ °¬À» ¶§
+	//ï¿½ï¿½ï¿½ï¿½ 5.  ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì³ï¿½ ï¿½ï¿½ï¿½Ê¿ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ && ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 	auto& TileList = _Tiles;
 
 	for (auto it = TileList.begin(); it != prev(TileList.end()); ++it)
 	{
 		auto& Tile = *it;
 
-		//ÇöÀç ¹â°í ÀÖ´Â Å¸ÀÏ
+		//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ Å¸ï¿½ï¿½
 		if (_ObjectGroup->GetpCurTile() == *it)
 		{
-			//´ÙÀ½ Å¸ÀÏ
+			//ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½
 			auto nextIt = next(it);
 			if (nextIt != TileList.end())
 			{
-				//ÇöÀç Å¸ÀÏÀÌ ´ÙÀ½Å¸ÀÏÀÇ y°ªº¸´Ù ÀÛÀ» ¶§
+				//ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 				auto& nextTile = *nextIt;
 				if (_ObjectGroup->GetpCurTile()->GetPos().fY < nextTile->GetPos().fY)
 				{
-					//¿ÀºêÁ§Æ®ÀÇ x °ªÀÌ Áö±ÝÅ¸ÀÏÀÇ xº¸´Ù Å©¸é ³«ÇÏ
+					//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ x ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ xï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 					if (_ObjectGroup->GetPos().fX >= _ObjectGroup->GetpCurTile()->GetPos().fX + _ObjectGroup->GetpCurTile()->GetScale().fX / 2)
 					{
 						_ObjectGroup->SetbFalling(true);
@@ -391,45 +427,45 @@ void CColliderMgr::GravityCondition(CObject* _ObjectGroup, vector<CObject*> _Til
 				}
 
 			}
-			//´ÙÀ½ Å¸ÀÏÀÌ ¾øÀ» ¶§
-			bool isGreater = true; // ¸ðµç Å¸ÀÏº¸´Ù Å«Áö ¿©ºÎ
+			//ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+			bool isGreater = true; // ï¿½ï¿½ï¿½ Å¸ï¿½Ïºï¿½ï¿½ï¿½ Å«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			for (const auto& tile : TileList)
 			{
 				if (_ObjectGroup->GetpCurTile()->GetPos().fX < tile->GetPos().fX)
 				{
 					isGreater = false;
-					break; // Á¶°ÇÀÌ ¸¸Á·ÇÏÁö ¾ÊÀ¸¸é Áß´Ü
+					break; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß´ï¿½
 				}
 			}
 
 			if (isGreater)
 			{
-				//¿ÀºêÁ§Æ®ÀÇ x °ªÀÌ Áö±ÝÅ¸ÀÏÀÇ xº¸´Ù Å©¸é ³«ÇÏ
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ x ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ xï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 				if (_ObjectGroup->GetPos().fX - _ObjectGroup->GetScale().fX / 2 > _ObjectGroup->GetpCurTile()->GetPos().fX + _ObjectGroup->GetpCurTile()->GetScale().fX / 2)
 				{
 					_ObjectGroup->SetbFalling(true);
 				}
 			}
 
-			//ÀÌÀü Å¸ÀÏ
+			//ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½
 			if (it != TileList.begin())
 			{
 				auto prevIt = prev(it);
 				auto& prevTile = *prevIt;
-				//ÇöÀç Å¸ÀÏÀÌ ´ÙÀ½Å¸ÀÏÀÇ y°ªº¸´Ù ÀÛÀ» ¶§
+				//ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 				if (_ObjectGroup->GetpCurTile()->GetPos().fY < prevTile->GetPos().fY)
 				{
-					//¿ÀºêÁ§Æ®ÀÇ x °ªÀÌ ÀÌÀüÅ¸ÀÏº¸´Ù Å©¸é ³«ÇÏ
+					//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ x ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¸ï¿½Ïºï¿½ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 					if (_ObjectGroup->GetPos().fX <= _ObjectGroup->GetpCurTile()->GetPos().fX - _ObjectGroup->GetpCurTile()->GetScale().fX / 2)
 					{
 						_ObjectGroup->SetbFalling(true);
 					}
 				}
 			}
-			//ÀÌÀü Å¸ÀÏÀÌ ¾øÀ» ¶§
+			//ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 			else if (it == TileList.begin())
 			{
-				//¿ÀºêÁ§Æ®ÀÇ x °ªÀÌ ÀÌÀüÅ¸ÀÏº¸´Ù Å©¸é ³«ÇÏ
+				//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ x ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¸ï¿½Ïºï¿½ï¿½ï¿½ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 				if (_ObjectGroup->GetPos().fX <= _ObjectGroup->GetpCurTile()->GetPos().fX - _ObjectGroup->GetpCurTile()->GetScale().fX / 2)
 				{
 					_ObjectGroup->SetbFalling(true);
@@ -439,12 +475,12 @@ void CColliderMgr::GravityCondition(CObject* _ObjectGroup, vector<CObject*> _Til
 	}
 }
 
-//Á¡ÇÁ ±¸Çö
+//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 void CColliderMgr::PlayerJump(vector<CObject*> _ObjectGroup)
 {
 	for (auto& object : _ObjectGroup)
 	{
-		//Á¡ÇÁ true
+		//ï¿½ï¿½ï¿½ï¿½ true
 		if (object->GetbJump())
 		{
 			m_bCollisionCooldown = false;
@@ -457,13 +493,13 @@ void CColliderMgr::PlayerJump(vector<CObject*> _ObjectGroup)
 			object->MinusfCurve();
 
 			float maxHeight = CalculateVelocityY(object->GetfJumpSpeed(), object->GetfGravity(), m_fTime);
-			// Á¡ÇÁ ÃÖ´ë°ª µµ´Þ
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ë°ª ï¿½ï¿½ï¿½ï¿½
 			if (maxHeight <= -10)
 			{
 					m_bJumpLimit = true;
 			}
 
-			//ÇÏ°­Áß
+			//ï¿½Ï°ï¿½ï¿½ï¿½
 			if (m_bJumpLimit)
 			{
 				m_bCollisionCooldown = true;
@@ -479,7 +515,7 @@ void CColliderMgr::PlayerJump(vector<CObject*> _ObjectGroup)
 				object->AddPos(tVec2{ 0, dynamic_cast<CPlayer*>(object)->GetfCurve() });
 			}
 
-			//Á¡ÇÁÁßÀÌ°í ¹ßÆÇº¸´Ù ÇÃ·¹ÀÌ¾î À§Ä¡°¡ ³·À» ¶§
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½Çºï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 			if (m_bJumpLimit && object->GetPos().fY + object->GetScale().fY / 2 >= object->GetpCurTile()->GetPos().fY - object->GetpCurTile()->GetScale().fY / 2)
 			{
 				m_bCollisionCooldown = true;
@@ -490,7 +526,7 @@ void CColliderMgr::PlayerJump(vector<CObject*> _ObjectGroup)
 				object->SeteState(STATE::IDLE);
 			}
 		}
-		//´õºíÁ¡ÇÁ true
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ true
 		if (object->GetbDoubleJump())
 		{
 			m_fTime += 0.6f;
@@ -499,13 +535,13 @@ void CColliderMgr::PlayerJump(vector<CObject*> _ObjectGroup)
 			object->MinusfDoubleCurve();
 
 			float maxHeight = CalculateVelocityY(object->GetfJumpSpeed(), object->GetfGravity(), m_fTime);
-			// Á¡ÇÁ ÃÖ´ë°ª µµ´Þ
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ë°ª ï¿½ï¿½ï¿½ï¿½
 			if (maxHeight <= -10)
 			{
 				m_bJumpLimit = true;
 			}
 
-			//ÇÏ°­Áß
+			//ï¿½Ï°ï¿½ï¿½ï¿½
 			if (m_bJumpLimit)
 			{
 				object->SetfCurve(0.f);
@@ -515,7 +551,7 @@ void CColliderMgr::PlayerJump(vector<CObject*> _ObjectGroup)
 			}
 			object->AddPos(tVec2{ 0, object->GetfDoubleCurve() });
 			
-			//Á¡ÇÁÁßÀÌ°í ¹ßÆÇº¸´Ù ÇÃ·¹ÀÌ¾î À§Ä¡°¡ ³·À» ¶§
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½Çºï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 			if (object->GetPos().fY + object->GetScale().fY / 2 >= object->GetpCurTile()->GetPos().fY - object->GetpCurTile()->GetScale().fY / 2)
 			{
 				object->SetbJumpSwitch(false);
@@ -534,7 +570,7 @@ void CColliderMgr::ObjectJump(vector<CObject*> _ObjectGroup)
 
 	for (auto& object : _ObjectGroup)
 	{
-		//Á¡ÇÁ true
+		//ï¿½ï¿½ï¿½ï¿½ true
 		if (object->GetbJump())
 		{
 			object->AddfTime(0.4f);
@@ -545,11 +581,11 @@ void CColliderMgr::ObjectJump(vector<CObject*> _ObjectGroup)
 			if (object->GetfCurve() < 0)
 			{
 				object->AddfGravity(0.5f);
-			}//Á¡ÇÁ »ó½ÂÁß
+			}//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 			else if (object->GetfCurve() > -100)
 			{
 				object->SetfCurve(MAX_GRAVITY);
-			}// Á¡ÇÁ ÇÏ°­Áß
+			}// ï¿½ï¿½ï¿½ï¿½ ï¿½Ï°ï¿½ï¿½ï¿½
 
 			object->AddPos(tVec2{ 0, object->GetfCurve()});
 
@@ -566,7 +602,7 @@ void CColliderMgr::ObjectJump(vector<CObject*> _ObjectGroup)
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-//°¡·Î¹üÀ§ ¾È¿¡ ÀÖ´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼ö
+//ï¿½ï¿½ï¿½Î¹ï¿½ï¿½ï¿½ ï¿½È¿ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
 bool CColliderMgr::CheckXRange(CObject* tile, CObject* object)
 {
 	float left = tile->GetPos().fX - tile->GetScale().fX / 2;
@@ -576,10 +612,10 @@ bool CColliderMgr::CheckXRange(CObject* tile, CObject* object)
 	return (left <= objectX && objectX <= right);
 }
 
-//¹ßÆÇ ±¸ºÐ ÇÔ¼ö
+//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 bool CColliderMgr::TileCompare(CObject* _Player,CObject* _CurrentTile, CObject* _NextTile)
 {
-	//ÇÃ·¹ÀÌ¾îº¸´Ù ´õ °¡±î¿ì¸é Æ®·ç·Î ÇØ¾ßÇÔ
+	//ï¿½Ã·ï¿½ï¿½Ì¾îº¸ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Æ®ï¿½ï¿½ï¿½ ï¿½Ø¾ï¿½ï¿½ï¿½
 	float playerY = _Player->GetPos().fY + _Player->GetScale().fY / 2;
 	
 	float CurrY = _CurrentTile->GetPos().fY - _CurrentTile->GetScale().fY / 2;
@@ -596,34 +632,34 @@ bool CColliderMgr::TileCompare(CObject* _Player,CObject* _CurrentTile, CObject* 
 	return false;
 }
 
-//°¡Àå °¡±î¿î ¹ßÆÇ Ã£±â
+//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½
 void CColliderMgr::SetClosestTile(CObject* object, vector<CObject*> Tiles)
 {
 	CObject* CurTile = nullptr;
 
 	for (CObject* TileList : Tiles)
 	{
-		//ÇÃ·¹ÀÌ¾î¿ÍÀÇ °Å¸®°¡ ´õ °¡±î¿ö¾ßÇÔ
+		//ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		if (CurTile == nullptr || TileCompare(object, CurTile, TileList))
 		{
 			if(object->GetPos().fY < TileList->GetPos().fY)
-				CurTile = TileList; // °¡Àå °¡±î¿î Å¸ÀÏ °»½Å
+				CurTile = TileList; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		}
 	}
 
 	if (CurTile != nullptr)
 	{
-		object->SetpCurTile(CurTile); // ÃÖÁ¾ ¹ßÆÇ ¼³Á¤
+		object->SetpCurTile(CurTile); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	}
 }
 
 
 float CColliderMgr::CalculateVelocityY(float jumpSpeed, float gravity, float time) 
 {
-	return jumpSpeed - (gravity * time); // YÃà ¼Óµµ °è»ê
+	return jumpSpeed - (gravity * time); // Yï¿½ï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½
 }
 
-//¾ÆÁ÷ ¹Ì»ç¿ë ÇÔ¼öµé
+//ï¿½ï¿½ï¿½ï¿½ ï¿½Ì»ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½
 void CColliderMgr::Initialize() {}
 void CColliderMgr::Release(){}
 

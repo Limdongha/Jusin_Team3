@@ -112,6 +112,8 @@ void CScene_Start::Update()
 
 	//씬업데이트
 	CScene::Update();
+
+	
 }
 
 void CScene_Start::Render()

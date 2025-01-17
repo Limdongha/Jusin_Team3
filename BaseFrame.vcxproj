@@ -150,6 +150,7 @@
     <ClInclude Include="Calculation.h" />
     <ClInclude Include="DH_CPlayer.h" />
     <ClInclude Include="DH_CTile.h" />
+    <ClInclude Include="CJumpPad.h" />
     <ClInclude Include="EffectFactory.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="EffectMgr.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="fmod_dsp_effects.h" />
     <ClInclude Include="fmod_errors.h" />
     <ClInclude Include="fmod_output.h" />
+    <ClInclude Include="KL_CPlayer.h" />
     <ClInclude Include="MyPng.h" />
     <ClInclude Include="ColliderMgr.h" />
     <ClInclude Include="PanelUI.h" />
@@ -202,7 +204,9 @@
     <ClCompile Include="Calculation.cpp" />
     <ClCompile Include="DH_CPlayer.cpp" />
     <ClCompile Include="DH_CTile.cpp" />
+    <ClCompile Include="CJumpPad.cpp" />
     <ClCompile Include="EffectFactory.cpp" />
+    <ClCompile Include="KL_CPlayer.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EffectMgr.cpp" />
