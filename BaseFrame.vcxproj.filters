@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="소스 파일\01.Mgr">
       <UniqueIdentifier>{d020117a-59e2-411b-8102-c4dd66497bdf}</UniqueIdentifier>
     </Filter>
@@ -123,6 +119,16 @@
     </Filter>
     <Filter Include="소스 파일\02.Scene\03.ROUNDROUMD">
       <UniqueIdentifier>{db849b64-9fcb-4d65-9df3-987864f093c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.Object\00.Player\KL_Player">
+      <UniqueIdentifier>{77fb6b6f-f8fb-4425-8925-0abe4b440d87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.Object\02. JumpPad">
+      <UniqueIdentifier>{2f2cb745-87ac-4efd-9579-d75e302ac70d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -270,6 +276,12 @@
     <ClInclude Include="Scene_ROUNDROUND.h">
       <Filter>소스 파일\02.Scene\03.ROUNDROUMD</Filter>
     </ClInclude>
+    <ClInclude Include="KL_CPlayer.h">
+      <Filter>소스 파일\03.Object\00.Player\KL_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="CJumpPad.h">
+      <Filter>소스 파일\03.Object\02. JumpPad</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneMgr.cpp">
@@ -383,18 +395,24 @@
     <ClCompile Include="Scene_ROUNDROUND.cpp">
       <Filter>소스 파일\02.Scene\03.ROUNDROUMD</Filter>
     </ClCompile>
+    <ClCompile Include="KL_CPlayer.cpp">
+      <Filter>소스 파일\03.Object\00.Player\KL_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="CJumpPad.cpp">
+      <Filter>소스 파일\03.Object\02. JumpPad</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Jusin02.rc">
-      <Filter>리소스 파일</Filter>
+      <Filter>소스 파일\리소스 파일</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
-      <Filter>리소스 파일</Filter>
+      <Filter>소스 파일\리소스 파일</Filter>
     </Image>
     <Image Include="Jusin02.ico">
-      <Filter>리소스 파일</Filter>
+      <Filter>소스 파일\리소스 파일</Filter>
     </Image>
   </ItemGroup>
 </Project>

@@ -15,6 +15,8 @@
 #include "UIMgr.h"
 #include "SoundMgr.h"
 #include "Effect.h"
+#include "KL_CPlayer.h"
+#include "CJumpPad.h"
 
 CColliderMgr::CColliderMgr() : m_Gravity(9.8f), m_fTime(0), m_bEffectCreated(false), m_bPlayerDead(false),
 m_bJumpLimit(false), m_bSound(false), m_SoundStart(0)
@@ -107,6 +109,32 @@ void CColliderMgr::CollisionEx(vector<CObject*> _Dst, vector<CObject*> _Src)
 					}
 				}
 			}
+		}
+	}
+}
+
+bool CColliderMgr::KL_CheckCircle(CObject* _Src, CObject* _Dst)
+{
+	D3DXVECTOR3 temp = _Dst->GetInfo().vPos - _Src->GetInfo().vPos;
+
+	float fRadius = 70.f; // 반지름 합
+
+	float fDiagonal = D3DXVec3Length(&temp); // 두 중점 거리
+
+	return fRadius >= fDiagonal;
+}
+
+void CColliderMgr::KL_CollisionCircle(CObject* _Src, vector<CObject*> _Dst)
+{
+	for (auto& Dst : _Dst)
+	{
+		if (KL_CheckCircle(_Src, Dst))
+		{
+			(_Src)->SetRotateSpeed(Dst->GetfRotateSpeed());
+
+			static_cast<KL_CPlayer*>(_Src)->SetTarget(Dst);
+			
+			return;
 		}
 	}
 }

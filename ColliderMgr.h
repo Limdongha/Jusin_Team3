@@ -37,6 +37,10 @@ public:
 	void		SetbPlayerDead(bool _bPlayerDead) { m_bPlayerDead = _bPlayerDead; }
 	bool		GetbPlayerDead() { return m_bPlayerDead; }
 
+public:
+	bool		KL_CheckCircle(CObject* _Src, CObject* _Dst);
+	void		KL_CollisionCircle(CObject* _Src, vector <CObject*> _Dst);
+
 private:
 	float		m_Gravity;
 	float		m_fTime;
