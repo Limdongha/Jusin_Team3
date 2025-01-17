@@ -61,9 +61,6 @@ void CScene::AddvObject(CObject* _obj, eObjectType _type)
 
 void CScene::DeleteGroup(eObjectType _eTarget)
 {
-	if (_eTarget == eObjectType::PLAYER || _eTarget == eObjectType::UI)
-		return;
-
 	for (size_t i = 0; i < m_vecSceneObject[(UINT)_eTarget].size(); ++i)
 	{
 		delete m_vecSceneObject[(UINT)_eTarget][i];

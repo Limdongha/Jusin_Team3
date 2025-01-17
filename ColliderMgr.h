@@ -34,7 +34,9 @@ public:
 public:
 	void		SetfTime(float _Time)		{ m_fTime = _Time; }
 	void		SetfGravity(float _Gravity) { m_Gravity = _Gravity; }
+	void		SetbCollisionCooldown(bool _Cool) { m_bCollisionCooldown = _Cool; }
 	void		SetbPlayerDead(bool _bPlayerDead) { m_bPlayerDead = _bPlayerDead; }
+	bool		GetbCollisionCooldown() { return m_bCollisionCooldown; }
 	bool		GetbPlayerDead() { return m_bPlayerDead; }
 
 private:
@@ -43,8 +45,13 @@ private:
 	bool		m_bJumpLimit;
 	bool		m_bEffectCreated;
 	bool		m_bPlayerDead;
+	bool		m_bCollisionCooldown;
 
 	bool		m_bSound;
 	ULONG64		m_SoundStart;
+
+private:
+	steady_clock::time_point 		m_tStartTime;
+	steady_clock::time_point		m_tCurTime;
 };
 

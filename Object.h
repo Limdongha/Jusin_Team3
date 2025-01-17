@@ -97,6 +97,15 @@ public:
 	void		MinusfDoubleCurve() { m_fDoubleCurve *= -1; }
 	void		MinusfCurve2() { m_fCurve2 *= -1; }
 
+
+public:
+	
+	// 폴리곤 그리기 //
+	void		DrawPolygon(int _PointNum, float centerX, float centerY, float radius, COLORREF _Color);
+	void		GenerateRegularPolygon(D3DXVECTOR3* points, int numPoints, float centerX, float centerY, float radius);
+	// 커스텀 폴리곤 그리기 //
+	void		DrawPolygonCustom(D3DXVECTOR3* _Point, int _PointNum, COLORREF _Color);
+
 public:
 
 	// 오브젝트 공격 콜리젼 생성함수 //

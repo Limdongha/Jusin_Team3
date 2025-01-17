@@ -15,9 +15,10 @@
 #include "UIMgr.h"
 #include "SoundMgr.h"
 #include "Effect.h"
+#include "DH_CPlayer.h"
 
 CColliderMgr::CColliderMgr() : m_Gravity(9.8f), m_fTime(0), m_bEffectCreated(false), m_bPlayerDead(false),
-m_bJumpLimit(false), m_bSound(false), m_SoundStart(0)
+m_bJumpLimit(false), m_bSound(false), m_SoundStart(0), m_bCollisionCooldown(true)
 {
 
 }
@@ -75,20 +76,21 @@ void CColliderMgr::CollisionEx(vector<CObject*> _Dst, vector<CObject*> _Src)
 				// 상 하 충돌
 				if (fX > fY)
 				{
+					// 하 충돌
+					if (Dst->GetPos().fY - Dst->GetScale().fY / 2 <= Src->GetPos().fY + Src->GetScale().fY / 2 &&
+						Dst->GetPos().fY - Dst->GetScale().fY / 2 > Src->GetPos().fY - Src->GetScale().fY / 2)
+					{
+						// 하충돌시
+					}
+
 					// 상 충돌
-					if (Dst->GetPos().fY + Dst->GetScale().fY / 2 >= Src->GetPos().fY - Src->GetScale().fY / 2 &&
-						Dst->GetPos().fY + Dst->GetScale().fY / 2 < Src->GetPos().fY)
+					else
 					{
 						Dst->SetPos(tVec2{
 							Dst->GetPos().fX,
 							Src->GetPos().fY - (Src->GetScale().fY / 2) - (Dst->GetScale().fY / 2)
 							});
 						return;
-					}
-					// 하 충돌
-					else
-					{
-						Dst->AddPos(tVec2{ 0, +fY });
 					}
 				}
 
@@ -98,18 +100,18 @@ void CColliderMgr::CollisionEx(vector<CObject*> _Dst, vector<CObject*> _Src)
 					// 좌 충돌
 					if (Dst->GetPos().fX < Src->GetPos().fX)
 					{
-						Dst->AddPos(tVec2{ -fX, 0 });
+						//Dst->AddPos(tVec2{ -fX, 0 });
 					}
 					// 우 충돌
 					else
 					{
-						Dst->AddPos(tVec2{ fX, 0 });
+						//Dst->AddPos(tVec2{ fX, 0 });
 					}
 				}
 			}
 		}
 	}
-}
+};
 
 
 //원충돌
@@ -249,7 +251,6 @@ void CColliderMgr::GetCurObjectTile(vector<CObject*> _ObjectGroup)
 void CColliderMgr::GravityCondition(vector<CObject*> _ObjectGroup, vector<CObject*> _Tiles)
 {
 	//여기서는 Falling 을 키고 끄는게 목표
-	
 	//조건 2.  플레이어의 y값이 발판의 y값보다 작을 때(더 높음) >> 기준을 플레이어 발 좌표기준
 	for (auto& Object : _ObjectGroup)
 	{
@@ -446,6 +447,8 @@ void CColliderMgr::PlayerJump(vector<CObject*> _ObjectGroup)
 		//점프 true
 		if (object->GetbJump())
 		{
+			m_bCollisionCooldown = false;
+
 			object->SetbJumpSwitch(true);
 
 			m_fTime += 0.6f;
@@ -463,6 +466,8 @@ void CColliderMgr::PlayerJump(vector<CObject*> _ObjectGroup)
 			//하강중
 			if (m_bJumpLimit)
 			{
+				m_bCollisionCooldown = true;
+				object->SetbFalling(true);
 				object->SetfCurve(0.f);
 				object->SetbJump(false);
 				object->SeteState(STATE::FALLING);
@@ -475,8 +480,9 @@ void CColliderMgr::PlayerJump(vector<CObject*> _ObjectGroup)
 			}
 
 			//점프중이고 발판보다 플레이어 위치가 낮을 때
-			if (object->GetPos().fY + object->GetScale().fY / 2 >= object->GetpCurTile()->GetPos().fY - object->GetpCurTile()->GetScale().fY / 2)
+			if (m_bJumpLimit && object->GetPos().fY + object->GetScale().fY / 2 >= object->GetpCurTile()->GetPos().fY - object->GetpCurTile()->GetScale().fY / 2)
 			{
+				m_bCollisionCooldown = true;
 				object->SetbJumpSwitch(false);
 				object->SetbJump(false);
 				object->SetfCurve(0.f);

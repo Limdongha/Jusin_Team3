@@ -73,7 +73,63 @@ void CObject::LateUpdate()
 	Move_Frame();
 }
 
+void CObject::DrawPolygon(int _PointNum, float centerX, float centerY, float radius, COLORREF _Color)
+{
+	// 점 배열 생성 (간격맞춰서 나열)
+	vector<D3DXVECTOR3> points(_PointNum);
+	GenerateRegularPolygon(points.data(), _PointNum, centerX, centerY, radius);
 
+	// POINT로 변환
+	vector<POINT> screenPoints(_PointNum);
+	for (int i = 0; i < _PointNum; ++i)
+	{
+		screenPoints[i] = { (LONG)points[i].x, (LONG)points[i].y };
+	}
+
+	// 브러시 생성
+	HBRUSH hBrush = CreateSolidBrush(_Color);
+	HBRUSH hOldBrush = (HBRUSH)SelectObject(g_memDC, hBrush);
+
+	// 다각형 그리기
+	Polygon(g_memDC, screenPoints.data(), _PointNum);
+
+	// 브러시 복원 및 삭제
+	SelectObject(g_memDC, hOldBrush);
+	DeleteObject(hBrush);
+}
+
+void CObject::GenerateRegularPolygon(D3DXVECTOR3* points, int numPoints, float centerX, float centerY, float radius)
+{
+	float angleStep = 360.0f / numPoints; // 점 사이의 각도
+	for (int i = 0; i < numPoints; ++i) 
+	{
+		float angle = angleStep * i * (D3DX_PI / 180.0f); // 각도를 라디안으로 변환
+		points[i].x = centerX + radius * cos(angle); // X 좌표
+		points[i].y = centerY + radius * sin(angle); // Y 좌표
+		points[i].z = 0; // Z는 2D라 0
+	}
+}
+
+void CObject::DrawPolygonCustom(D3DXVECTOR3* _Point, int _PointNum, COLORREF _Color)
+{
+	// POINT 배열 생성
+	vector<POINT> points(_PointNum);
+	for (int i = 0; i < _PointNum; ++i)
+	{
+		points[i] = { (LONG)_Point[i].x, (LONG)_Point[i].y };
+	}
+
+	// 브러시 생성 (채우기 색상 지정)
+	HBRUSH hBrush = CreateSolidBrush(_Color);
+	HBRUSH hOldBrush = (HBRUSH)SelectObject(g_memDC, hBrush);
+
+	// 다각형 내부 색 채우기
+	Polygon(g_memDC, points.data(), _PointNum);
+
+	// 브러시 복원 및 삭제
+	SelectObject(g_memDC, hOldBrush);
+	DeleteObject(hBrush);
+}
 
 
 // 아직 미사용 함수들

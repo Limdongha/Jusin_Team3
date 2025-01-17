@@ -127,6 +127,9 @@
     <Filter Include="소스 파일\03.Object\00.Player\DH_CPlayer">
       <UniqueIdentifier>{359f2bab-1f67-472a-9baf-4eca80ac5a13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\01.Mgr\07.TileMgr\01.DH_Tile">
+      <UniqueIdentifier>{582f2804-d307-4adb-adb6-97d872ae2f0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -276,6 +279,9 @@
     <ClInclude Include="DH_CPlayer.h">
       <Filter>소스 파일\03.Object\00.Player\DH_CPlayer</Filter>
     </ClInclude>
+    <ClInclude Include="DH_CTile.h">
+      <Filter>소스 파일\01.Mgr\07.TileMgr\01.DH_Tile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneMgr.cpp">
@@ -391,6 +397,9 @@
     </ClCompile>
     <ClCompile Include="DH_CPlayer.cpp">
       <Filter>소스 파일\03.Object\00.Player\DH_CPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="DH_CTile.cpp">
+      <Filter>소스 파일\01.Mgr\07.TileMgr\01.DH_Tile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
