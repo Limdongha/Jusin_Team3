@@ -37,7 +37,6 @@ void CScene_ROUNDROUND::Enter()
 	m_bChangeScene = false;
 	m_fFade = 1.0f;
 
-	int a;
 
 	for (int i = 0; i < 7; ++i)
 	{

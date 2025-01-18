@@ -2,7 +2,7 @@
 #include "KL_CPlayer.h"
 #include "ScrollMgr.h"
 
-KL_CPlayer::KL_CPlayer() :m_pTarget(nullptr), m_bCol(false)
+KL_CPlayer::KL_CPlayer() :m_pTarget(nullptr), m_bCol(false), m_fRadius(0.f)
 {
 	for (int i = 0; i < 4; ++i)
 	{
@@ -25,23 +25,32 @@ void KL_CPlayer::Render()
 {
 	int		iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 	
-	MoveToEx(g_memDC, int(m_vPoint[0].x + m_tInfo.vPos.x) + iScrollX, int(m_vPoint[0].y + m_tInfo.vPos.y), nullptr);
 
-	for (int i = 0; i < 4; ++i)
+	
+	vector<POINT> points(8);
+	for (int i = 0; i < 8; ++i)
 	{
-		LineTo(g_memDC, int(m_vPoint[i].x + m_tInfo.vPos.x) + iScrollX, int(m_vPoint[i].y + m_tInfo.vPos.y));
-
-		if (i > 0)
-			continue;
-
-		Ellipse(g_memDC,
-			int(m_vPoint[i].x + m_tInfo.vPos.x - 5.f) + iScrollX,
-			int(m_vPoint[i].y + m_tInfo.vPos.y - 5.f),
-			int(m_vPoint[i].x + m_tInfo.vPos.x + 5.f) + iScrollX,
-			int(m_vPoint[i].y + m_tInfo.vPos.y + 5.f));
+		points[i] = {LONG(m_vPoint[i].x +m_tInfo.vPos.x) + iScrollX, LONG(m_vPoint[i].y + m_tInfo.vPos.y)};
 	}
 
-	LineTo(g_memDC, int(m_vPoint[0].x + m_tInfo.vPos.x) + iScrollX, int(m_vPoint[0].y + m_tInfo.vPos.y));
+	// 브러시 생성 (채우기 색상 지정)
+	HBRUSH hBrush = CreateSolidBrush(RGB(0, 191, 255));
+	HBRUSH hOldBrush = (HBRUSH)SelectObject(g_memDC, hBrush);
+
+	// 다각형 내부 색 채우기
+	Polygon(g_memDC, points.data(), 8);
+
+	// 브러시 복원 및 삭제
+	SelectObject(g_memDC, hOldBrush);
+	DeleteObject(hBrush);
+
+	Ellipse(g_memDC,
+	int(m_vPoint[0].x + m_tInfo.vPos.x - 5.f) + iScrollX,
+	int(m_vPoint[0].y + m_tInfo.vPos.y - 5.f),
+	int(m_vPoint[0].x + m_tInfo.vPos.x + 5.f) + iScrollX,
+	int(m_vPoint[0].y + m_tInfo.vPos.y + 5.f));
+	
+
 
 	// 포신
 
@@ -52,14 +61,15 @@ void KL_CPlayer::Render()
 
 void KL_CPlayer::Update()
 {
-	int		iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+	
 	if (!GetbJump())
 	{
 		if (nullptr != m_pTarget)
 		{
 			
 
-			D3DXMATRIX		 matRotZ, matTrans, matRevZ, matParent;
+			D3DXMATRIX	matScale, matRotZ, matTrans, matRevZ, matParent;
+			D3DXMatrixScaling(&matScale, 1.f, 1.f, 1.f);
 			m_fAngle -= D3DXToRadian(m_fRotateSpeed * 60);
 
 			D3DXMatrixRotationZ(&matRotZ, -D3DXToRadian(m_fAngle));
@@ -69,14 +79,14 @@ void KL_CPlayer::Update()
 			D3DXVECTOR3 targetPos = m_pTarget->GetInfo().vPos;
 			//targetPos.x += iScrollX;
 			
-			D3DXMatrixTranslation(&matTrans, -targetPos.x , -targetPos.y , 0.f);
+			D3DXMatrixTranslation(&matTrans, -targetPos.x - m_fRadius  , -targetPos.y - m_fRadius, 0.f);
 
 			D3DXMatrixTranslation(&matParent, targetPos.x , targetPos.y, 0.f);
 		
-			m_tInfo.matWorld =  matTrans * matRevZ * matParent;
+			m_tInfo.matWorld = matScale* matTrans * matRevZ * matParent;
 
 
-			for (int i = 0; i < 4; ++i)
+			for (int i = 0; i < 8; ++i)
 			{
 				D3DXVec3TransformNormal(&m_vPoint[i], &m_vOriginPoint[i], &m_tInfo.matWorld);
 			}
@@ -85,17 +95,15 @@ void KL_CPlayer::Update()
 
 			D3DXVec3TransformCoord(&m_tInfo.vPos, &m_vOriginPos, &m_tInfo.matWorld);
 
-			m_tInfo.matWorld = matRotZ * matTrans * matRevZ * matParent;
+			m_tInfo.matWorld = matScale * matRotZ * matTrans * matRevZ * matParent;
 
 			D3DXVec3TransformNormal(&m_vGunPoint, &m_vOriginGunPoint, &m_tInfo.matWorld);
 
 
-
-
 			m_tInfo.vDir = m_vGunPoint / 40.f;
+		
 
-
-
+			m_fRadius += 0.2f;
 		}
 	}
 
@@ -107,18 +115,19 @@ void KL_CPlayer::Update()
 
 void KL_CPlayer::Initialize()
 {
-	m_tInfo.vPos = { 100.f, 300.f, 0.f };
+	m_tInfo.vPos = { 100.f, 350.f, 0.f };
 	SetfSpeed(3.f);
 	m_tInfo.vLook = { 0.f, -1.f, 0.f };
 
 	m_vOriginPos = m_tInfo.vPos;
 
-	m_vPoint[0] = {  - 20.f, - 20.f, 0.f };
-	m_vPoint[1] = { + 20.f,  - 20.f, 0.f };
-	m_vPoint[2] = {  + 20.f,  + 20.f, 0.f };
-	m_vPoint[3] = { - 20.f,  + 20.f, 0.f };
+	for (int i = 0; i < 8; ++i)
+	{
+		m_vPoint[i] = { 40.f * cosf(PI / 4 * i), 40.f * sinf(PI / 4 * i), 0.f };
+	}
+	
 
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < 8; ++i)
 		m_vOriginPoint[i] = m_vPoint[i];
 
 	m_vGunPoint = {0.f, - 40.f , 0.f };
@@ -152,7 +161,7 @@ void KL_CPlayer::Change_Motion()
 void KL_CPlayer::Offset()
 {
 
-	int		iOffSetminX = 100;
+	int		iOffSetminX = 0;
 	int		iOffSetmaxX = 400;
 
 	
@@ -181,14 +190,14 @@ void KL_CPlayer::JumpIng()
 {
 	AddfTime(0.2f);
 
-	m_tInfo.vPos += m_tInfo.vDir * 15;
+	m_tInfo.vPos += m_tInfo.vDir * fabs(m_fRotateSpeed) * 7.5f;
 	
 	
 
 	if (GetfTime() > 2.f)
 	{
 		m_vOriginPos = m_tInfo.vPos;
-
+		m_fRadius = 0.f;
 		m_fAngle = 0.f;
 		SetbJump(false);
 		SetfTime(0.f);
