@@ -15,7 +15,7 @@ public:
 	virtual void		Release();
 
 public:
-	// GET ÇÔ¼öµé //
+	// GET ï¿½Ô¼ï¿½ï¿½ï¿½ //
 
 	tObjInfo*			Get_Info_Pointer()	{ return &m_tObjInfo; }
 	tVec2				GetPos()			{ return m_tObjInfo.tPos; }
@@ -48,7 +48,7 @@ public:
 
 public:
 	
-	// SET ÇÔ¼öµé //
+	// SET ï¿½Ô¼ï¿½ï¿½ï¿½ //
 	
 	void		SetPos(tVec2 _Set)				{ m_tObjInfo.tPos = _Set; }
 	void		SetScale(tVec2 _Set)			{ m_tObjInfo.tScale = _Set; }
@@ -79,7 +79,7 @@ public:
 
 public:
 	
-	// Add ÇÔ¼öµé //
+	// Add ï¿½Ô¼ï¿½ï¿½ï¿½ //
 	
 	void		AddPos(tVec2 _Set)			{ m_tObjInfo.tPos + _Set; }
 	void		AddScale(tVec2 _Set)		{ m_tObjInfo.tScale + _Set; }
@@ -94,7 +94,7 @@ public:
 
 public:
 
-	// Áß·Â°ü·Ã ÇÔ¼öµé //
+	// ï¿½ß·Â°ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ //
 
 	void		MinusfCurve() { m_fCurve *= -1; }
 	void		MinusfDoubleCurve() { m_fDoubleCurve *= -1; }
@@ -103,15 +103,15 @@ public:
 
 public:
 	
-	// Æú¸®°ï ±×¸®±â //
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ //
 	void		DrawPolygon(int _PointNum, float centerX, float centerY, float radius, COLORREF _Color);
 	void		GenerateRegularPolygon(D3DXVECTOR3* points, int numPoints, float centerX, float centerY, float radius);
-	// Ä¿½ºÅÒ Æú¸®°ï ±×¸®±â //
+	// Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ //
 	void		DrawPolygonCustom(D3DXVECTOR3* _Point, int _PointNum, COLORREF _Color);
 
 public:
 
-	// ¿ÀºêÁ§Æ® °ø°Ý ÄÝ¸®Á¯ »ý¼ºÇÔ¼ö //
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½Ý¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ //
 
 	void		CreateAttackBox
 				(float _PosfX, float _PosfY, float _ScaleX, float _ScaleY, eEffect _eType,
@@ -120,7 +120,7 @@ public:
 
 public:
 	
-	// ¾Ö´Ï¸ÞÀÌ¼Ç ÁøÇà //
+	// ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ //
 
 	void		Move_Frame();
 
@@ -128,19 +128,19 @@ public:
 	const RENDERID Get_GroupID() const { return m_eRender; }
 
 private:
-	//ÀÌº¥Æ® ¸Å´ÏÀú¸¦ ÅëÇØ¼­¸¸ »èÁ¦°¡´É
+	//ï¿½Ìºï¿½Æ® ï¿½Å´ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	void		SetDead() { m_bArrive = false; }
 	friend class CEventMgr;
 
 private:
-	//¿ÀºêÁ§Æ® ÀÌ¸§
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ì¸ï¿½
 	wstring			m_strName;
 
-	//¿ÀºêÁ§Æ® ÀÎÆ÷
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
 	tObjInfo		m_tObjInfo;
 	RECT			m_rRect;
 
-	//°¢Á¾ ±â´É
+	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 	bool			m_bDie;
 	bool			m_bArrive;
 	bool			m_bFalling;
@@ -162,34 +162,34 @@ private:
 	int				m_iDieTime;
 
 protected:
-	//ºñÆ®¸Ê Àü¿ë
+	//ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	CTextures*			m_pCurTex;
 	CTextures*			m_pLeftTex;
 	CTextures*			m_pRightTex;
 
 protected:
-	//PNG Àü¿ë
+	//PNG ï¿½ï¿½ï¿½ï¿½
 	Image*			m_pCurPNG;
 	Image*			m_pLeftPNG;
 	Image*			m_pRightPNG;
 
 protected:
-	//¾Ö´Ï¸ÞÀÌ¼Ç
+	//ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
 	CObject*			m_pCurTile;
 	vector<CObject*>	m_vCurTileVector;
 
-	//¾Ö´Ï¸ÞÀÌ¼Ç »óÅÂ
+	//ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½
 	STATE				m_eCurState;
 	STATE				m_ePreState;
 
-	//ÀÌÆåÆ®ÀÌ¸§
+	//ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Ì¸ï¿½
 	eEffectName			m_eCurEffect;
 	eEffectName			m_ePreEffect;
 
-	//¾Ö´Ï¸ÞÀÌ¼Ç ÇÁ·¹ÀÓ
+	//ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	FRAME				m_tFrame;
 
-	//·»´õ·¹ÀÌ¾î
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¾ï¿½
 	RENDERID			m_eRender;
 
 protected:
