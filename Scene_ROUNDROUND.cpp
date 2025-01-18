@@ -36,11 +36,19 @@ void CScene_ROUNDROUND::Enter()
 	{
 		CObject* pJumpPad = new CJumpPad;
 		pJumpPad->Initialize();
-		pJumpPad->SetPosVector(100 + 150 * i, 300);
+		
 		if (i % 2 == 0)
+		{
+			pJumpPad->SetPosVector(100 + 175 * i, 450);
 			pJumpPad->SetRotateSpeed(2.f);
+		}
+			
 		else
+		{
+			pJumpPad->SetPosVector(100 + 175 * i, 350);
 			pJumpPad->SetRotateSpeed(-2.f);
+		}
+			
 
 		Create_Object(pJumpPad, eObjectType::TILE);
 	}

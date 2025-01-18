@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Define.h"
 #include "ColliderMgr.h"
 #include "SceneMgr.h"
@@ -119,9 +119,9 @@ bool CColliderMgr::KL_CheckCircle(CObject* _Src, CObject* _Dst)
 {
 	D3DXVECTOR3 temp = _Dst->GetInfo().vPos - _Src->GetInfo().vPos;
 
-	float fRadius = 70.f; // ������ ��
+	float fRadius = 95.f; // 반지름 합
 
-	float fDiagonal = D3DXVec3Length(&temp); // �� ���� �Ÿ�
+	float fDiagonal = D3DXVec3Length(&temp); // 두 중점 거리
 
 	return fRadius >= fDiagonal;
 }
@@ -156,7 +156,7 @@ bool CColliderMgr::CollisionCircle(CObject* lhs, CObject* rhs, float _ScrollX, f
 	float radiusObj = lhs->GetScale().fX * 0.5f;
 	float radiusObj1 = rhs->GetScale().fY * 0.5f;
 
-	float collisionDis = radiusObj + radiusObj1; // �� ������Ʈ�� ������ ���� ��(�浹 ���� �Ÿ�)
+	float collisionDis = radiusObj + radiusObj1;// 두 오브젝트의 반지름 더한 값(충돌 기준 거리)
 
 	float x1 = lhs->GetPos().fX + _ScrollX, x2 = rhs->GetPos().fX + _ScrollX;
 	float y1 = lhs->GetPos().fY + _ScrollY, y2 = rhs->GetPos().fY + _ScrollY;
