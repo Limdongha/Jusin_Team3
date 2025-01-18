@@ -6,6 +6,10 @@
 #include "PngManager.h"
 #include "MainGame.h"
 #include "SoundMgr.h"
+#include "HW_CPlayer.h"
+#include "HW_CLineMgr.h"
+#include "ScrollMgr.h"
+
 
 CScene_RUNRUN::CScene_RUNRUN()
 {
@@ -18,6 +22,7 @@ CScene_RUNRUN::CScene_RUNRUN()
 
 CScene_RUNRUN::~CScene_RUNRUN()
 {
+	HW_CLineMgr::Get_Instance()->Release();
 }
 
 
@@ -25,6 +30,13 @@ void CScene_RUNRUN::Enter()
 {
 	m_bChangeScene = false;
 	m_fFade = 1.0f;
+
+	HW_CPlayer* pPlayer = new HW_CPlayer;
+	pPlayer->Initialize();
+	Create_Object(pPlayer, eObjectType::PLAYER);
+
+	HW_CLineMgr::Get_Instance()->Initialize();
+
 }
 
 void CScene_RUNRUN::Exit()
@@ -42,6 +54,7 @@ void CScene_RUNRUN::Update()
 		CSoundMgr::GetInst()->SetChannelVolume(SOUND_BGM, g_fVolume);
 	}
 
+	CScene::Update();
 #pragma region ¾À ÀüÈ¯
 
 	//¾À ÀüÈ¯
@@ -72,7 +85,13 @@ void CScene_RUNRUN::Update()
 void CScene_RUNRUN::Render()
 {
 
+	int		iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+	int		iScrollY = (int)CScrollMgr::Get_Instance()->Get_ScrollY();
+
 	Rectangle(g_memDC, 0, 0, 1280, 720);
+
+	HW_CLineMgr::Get_Instance()->Render();
+	CScene::Render();
 
 	if (0 < m_fFade)
 		AlphaBlend(m_pBlack, m_fFade);

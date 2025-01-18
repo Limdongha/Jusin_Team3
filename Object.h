@@ -179,5 +179,7 @@ protected:
 
 	//렌더레이어
 	RENDERID			m_eRender;
+
+	INFO				m_tInfo;
 };
 
