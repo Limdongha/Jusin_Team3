@@ -125,6 +125,7 @@
     </Filter>
     <Filter Include="소스 파일\01.Mgr\07.TileMgr\01.DH_Tile">
       <UniqueIdentifier>{582f2804-d307-4adb-adb6-97d872ae2f0e}</UniqueIdentifier>
+	</Filter>
     <Filter Include="소스 파일\03.Object\00.Player\KL_Player">
       <UniqueIdentifier>{77fb6b6f-f8fb-4425-8925-0abe4b440d87}</UniqueIdentifier>
     </Filter>
@@ -286,6 +287,7 @@
     </ClInclude>
     <ClInclude Include="DH_CTile.h">
       <Filter>소스 파일\01.Mgr\07.TileMgr\01.DH_Tile</Filter>
+	</ClInclude>
     <ClInclude Include="KL_CPlayer.h">
       <Filter>소스 파일\03.Object\00.Player\KL_Player</Filter>
     </ClInclude>
@@ -410,6 +412,7 @@
     </ClCompile>
     <ClCompile Include="DH_CTile.cpp">
       <Filter>소스 파일\01.Mgr\07.TileMgr\01.DH_Tile</Filter>
+	</ClCompile>
     <ClCompile Include="KL_CPlayer.cpp">
       <Filter>소스 파일\03.Object\00.Player\KL_Player</Filter>
     </ClCompile>
