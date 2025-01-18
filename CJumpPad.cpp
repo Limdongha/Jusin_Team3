@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CJumpPad.h"
+#include "ScrollMgr.h"
 
 CJumpPad::CJumpPad() 
 {
@@ -11,13 +12,15 @@ CJumpPad::~CJumpPad()
 
 void CJumpPad::Render()
 {
+	int		iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+
 	Ellipse(g_memDC,
-		int(m_tInfo.vPos.x - 75.f),
+		int(m_tInfo.vPos.x + iScrollX - 75.f),
 		int(m_tInfo.vPos.y - 75.f),
-		int(m_tInfo.vPos.x + 75.f),
+		int(m_tInfo.vPos.x + iScrollX + 75.f),
 		int(m_tInfo.vPos.y + 75.f));
-	MoveToEx(g_memDC, int(m_tInfo.vPos.x), int(m_tInfo.vPos.y), nullptr);
-	LineTo(g_memDC, int(m_tInfo.vPos.x + m_tInfo.vDir.x * 50), int(m_tInfo.vPos.y + m_tInfo.vDir.y * 50));
+	MoveToEx(g_memDC, int(m_tInfo.vPos.x) + iScrollX, int(m_tInfo.vPos.y), nullptr);
+	LineTo(g_memDC, int(m_tInfo.vPos.x + m_tInfo.vDir.x * 50) + iScrollX, int(m_tInfo.vPos.y + m_tInfo.vDir.y * 50));
 }
 
 void CJumpPad::Update()

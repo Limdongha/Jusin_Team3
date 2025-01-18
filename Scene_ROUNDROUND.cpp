@@ -12,8 +12,14 @@
 #include "SceneMgr.h"
 #include "ScrollMgr.h"
 
-CScene_ROUNDROUND::CScene_ROUNDROUND()
+CScene_ROUNDROUND::CScene_ROUNDROUND() : m_pBG2(nullptr), m_iBG1(0), m_iBG2(800), m_iCountCreatePad(6)
 {
+	m_pBG = CResMgr::GetInst()->LoadTexture
+	(L"Jump", L"./\\Content\\Textures\\BG\\JumpJump.bmp");
+
+	m_pBG2 = CResMgr::GetInst()->LoadTexture
+	(L"Jump2", L"./\\Content\\Textures\\BG\\JumpJump.bmp");
+
 	CPngManager::GetInst()->Insert_Png
 	(L"./\\Content\\Textures\\Black.png", L"FadeBlack");
 
@@ -32,20 +38,20 @@ void CScene_ROUNDROUND::Enter()
 	m_fFade = 1.0f;
 
 
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < 7; ++i)
 	{
 		CObject* pJumpPad = new CJumpPad;
 		pJumpPad->Initialize();
 		
 		if (i % 2 == 0)
 		{
-			pJumpPad->SetPosVector(100 + 175 * i, 450);
+			pJumpPad->SetPosVector(100 + 175 * i, 375);
 			pJumpPad->SetRotateSpeed(2.f);
 		}
 			
 		else
 		{
-			pJumpPad->SetPosVector(100 + 175 * i, 350);
+			pJumpPad->SetPosVector(100 + 175 * i, 225);
 			pJumpPad->SetRotateSpeed(-2.f);
 		}
 			
@@ -114,6 +120,10 @@ void CScene_ROUNDROUND::Update()
 
 	CScene::LateUpdate();
 
+	DeleteJumpPad();
+	CreateJumpPad();
+	
+
 #pragma endregion
 
 }
@@ -121,18 +131,95 @@ void CScene_ROUNDROUND::Update()
 void CScene_ROUNDROUND::Render()
 {
 
-	CScrollMgr::Get_Instance()->Scroll_Lock(3000, 720);
+	Rectangle(g_memDC, 0, 0, 1280, 720);
 
-	int		iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
-	int		iScrollY = (int)CScrollMgr::Get_Instance()->Get_ScrollY();
-	Rectangle(g_memDC, iScrollX, 0, 800 , 720);
+	int BG1 = m_iBG1 + (int)SCROLLX; // 첫 번째 배경 위치
+	int BG2 = m_iBG2 + (int)SCROLLX; // 두 번째 배경 위치
+
+	// 첫 번째 배경이 화면 왼쪽으로 사라지면 오른쪽 이동
+	if (BG1 <= -800) {
+		m_iBG1 = m_iBG2 + 800; // 두 번째 배경 바로 오른쪽으로 이동
+	}
+
+	// 두 번째 배경이 화면 왼쪽으로 사라지면 오른쪽 이동
+	if (BG2 <= -800) {
+		m_iBG2 = m_iBG1 + 800; // 첫 번째 배경 바로 오른쪽으로 이동
+	}
+
+
+	BitBlt(
+		g_memDC,
+		m_iBG1 + (int)SCROLLX,
+		0,
+		800,
+		600,
+		m_pBG->GetDC(),
+		0,
+		0,
+		SRCCOPY
+	);
+	BitBlt(
+		g_memDC,
+		m_iBG2 + (int)SCROLLX,
+		0,
+		800,
+		600,
+		m_pBG2->GetDC(),
+		0,
+		0,
+		SRCCOPY
+	);
 
 	CScene::Render();
-
 	if (0 < m_fFade)
 		AlphaBlend(m_pBlack, m_fFade);
 
 	
+}
+
+void CScene_ROUNDROUND::CreateJumpPad()
+{
+	auto pPlayer = GetvSceneObj()[(ULONG)eObjectType::PLAYER].front();
+
+	auto& Tile = GetvSceneObj()[(ULONG)eObjectType::TILE];
+
+	if (pPlayer->GetInfo().vPos.x + 300 > Tile.back()->GetInfo().vPos.x)
+	{
+		++m_iCountCreatePad;
+		CObject* pJumpPad = new CJumpPad;
+		pJumpPad->Initialize();
+
+		if (m_iCountCreatePad % 2 == 0)
+		{
+			pJumpPad->SetPosVector(100 + 175 * m_iCountCreatePad, 375);
+			pJumpPad->SetRotateSpeed(2.f * m_iCountCreatePad * 0.2f);
+		}
+
+		else
+		{
+			pJumpPad->SetPosVector(100 + 175 * m_iCountCreatePad, 225);
+			pJumpPad->SetRotateSpeed(-2.f * m_iCountCreatePad * 0.2f);
+		}
+
+
+		Create_Object(pJumpPad, eObjectType::TILE);
+	}
+}
+
+void CScene_ROUNDROUND::DeleteJumpPad()
+{
+	auto pPlayer = GetvSceneObj()[(ULONG)eObjectType::PLAYER].front();
+
+	auto& Tile = GetvSceneObj()[(ULONG)eObjectType::TILE];
+	for (auto it = Tile.begin(); it != Tile.end(); ++it )
+	{
+		//  플레이어 왼쪽에 있는 애들 일정 거리 넘어가면 계속 삭제
+		if ((*it)->GetInfo().vPos.x + 300 < pPlayer->GetInfo().vPos.x )
+		{
+			(*it)->SetbArrive(false);
+		}
+		
+	}
 }
 
 

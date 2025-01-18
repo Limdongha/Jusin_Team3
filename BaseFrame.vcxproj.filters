@@ -135,6 +135,7 @@
     <Filter Include="소스 파일\리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+	</Filter>
     <Filter Include="소스 파일\03.Object\00.Player\HW_CPlayer">
       <UniqueIdentifier>{70aad255-5545-4c3b-88a5-5f9e3a306af3}</UniqueIdentifier>
     </Filter>
@@ -304,6 +305,7 @@
     </ClInclude>
     <ClInclude Include="CJumpPad.h">
       <Filter>소스 파일\03.Object\02. JumpPad</Filter>
+	</ClInclude>
     <ClInclude Include="HW_CPlayer.h">
       <Filter>소스 파일\03.Object\00.Player\HW_CPlayer</Filter>
     </ClInclude>
@@ -440,6 +442,7 @@
     </ClCompile>
     <ClCompile Include="CJumpPad.cpp">
       <Filter>소스 파일\03.Object\02. JumpPad</Filter>
+	</ClCompile>
     <ClCompile Include="HW_CPlayer.cpp">
       <Filter>소스 파일\03.Object\00.Player\HW_CPlayer</Filter>
     </ClCompile>
