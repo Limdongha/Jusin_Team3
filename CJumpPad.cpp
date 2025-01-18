@@ -12,10 +12,10 @@ CJumpPad::~CJumpPad()
 void CJumpPad::Render()
 {
 	Ellipse(g_memDC,
-		int(m_tInfo.vPos.x - 50.f),
-		int(m_tInfo.vPos.y - 50.f),
-		int(m_tInfo.vPos.x + 50.f),
-		int(m_tInfo.vPos.y + 50.f));
+		int(m_tInfo.vPos.x - 75.f),
+		int(m_tInfo.vPos.y - 75.f),
+		int(m_tInfo.vPos.x + 75.f),
+		int(m_tInfo.vPos.y + 75.f));
 	MoveToEx(g_memDC, int(m_tInfo.vPos.x), int(m_tInfo.vPos.y), nullptr);
 	LineTo(g_memDC, int(m_tInfo.vPos.x + m_tInfo.vDir.x * 50), int(m_tInfo.vPos.y + m_tInfo.vDir.y * 50));
 }

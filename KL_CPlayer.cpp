@@ -60,13 +60,13 @@ void KL_CPlayer::Update()
 			
 
 			D3DXMATRIX		 matRotZ, matTrans, matRevZ, matParent;
-			m_fAngle -= D3DXToRadian(m_fRotateSpeed * 30);
+			m_fAngle -= D3DXToRadian(m_fRotateSpeed * 60);
 
 			D3DXMatrixRotationZ(&matRotZ, -D3DXToRadian(m_fAngle));
 
-			D3DXMatrixRotationZ(&matRevZ, -D3DXToRadian(m_fAngle) );
+			D3DXMatrixRotationZ(&matRevZ, -D3DXToRadian(m_fAngle) /2.f );
 			
-			D3DXMatrixTranslation(&matTrans, -m_pTarget->GetInfo().vPos.x, -m_pTarget->GetInfo().vPos.y, 0.f);
+			D3DXMatrixTranslation(&matTrans, -m_pTarget->GetInfo().vPos.x , -m_pTarget->GetInfo().vPos.y , 0.f);
 
 			D3DXMatrixTranslation(&matParent, m_pTarget->GetInfo().vPos.x, m_pTarget->GetInfo().vPos.y, 0.f);
 		
@@ -104,7 +104,7 @@ void KL_CPlayer::Update()
 
 void KL_CPlayer::Initialize()
 {
-	m_tInfo.vPos = { 300.f, 300.f, 0.f };
+	m_tInfo.vPos = { 100.f, 500.f, 0.f };
 	SetfSpeed(3.f);
 	m_tInfo.vLook = { 0.f, -1.f, 0.f };
 
@@ -169,7 +169,7 @@ void KL_CPlayer::JumpIng()
 {
 	AddfTime(0.2f);
 
-	m_tInfo.vPos += m_tInfo.vDir * 10;
+	m_tInfo.vPos += m_tInfo.vDir * 15;
 	
 	
 
