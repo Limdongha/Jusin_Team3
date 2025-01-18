@@ -162,6 +162,10 @@
     <ClInclude Include="fmod_errors.h" />
     <ClInclude Include="fmod_output.h" />
     <ClInclude Include="KL_CPlayer.h" />
+    <ClInclude Include="HW_CLine.h" />
+    <ClInclude Include="HW_CLineMgr.h" />
+    <ClInclude Include="HW_CMonster.h" />
+    <ClInclude Include="HW_CPlayer.h" />
     <ClInclude Include="MyPng.h" />
     <ClInclude Include="ColliderMgr.h" />
     <ClInclude Include="PanelUI.h" />
@@ -207,6 +211,10 @@
     <ClCompile Include="CJumpPad.cpp" />
     <ClCompile Include="EffectFactory.cpp" />
     <ClCompile Include="KL_CPlayer.cpp" />
+    <ClCompile Include="HW_CLine.cpp" />
+    <ClCompile Include="HW_CLineMgr.cpp" />
+    <ClCompile Include="HW_CMonster.cpp" />
+    <ClCompile Include="HW_CPlayer.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="EffectMgr.cpp" />
