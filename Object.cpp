@@ -6,7 +6,7 @@
 #include "SceneMgr.h"
 
 CObject::CObject() :
-	m_tObjInfo(tObjInfo{ tVec2{100,100},tVec2{100,100} }), m_pCurTex(nullptr),
+	m_tObjInfo(tObjInfo{ tVec2{100,100},tVec2{100,100} }), m_pCurTex(nullptr), 
 	m_bArrive(true), m_rRect(RECT{}), m_pLeftTex(nullptr), m_pRightTex(nullptr), m_iDirection(0),
 	m_eCurState(STATE::IDLE), m_ePreState(STATE::IDLE), m_tFrame(FRAME{}), m_bFalling(false),
 	m_pCurTile(nullptr), m_vCurTileVector(),m_bJump(false), m_fJumpSpeed(16.f), m_fTime(0.f),

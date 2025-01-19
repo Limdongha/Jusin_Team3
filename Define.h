@@ -379,9 +379,9 @@ enum class eObjectType
 	SHILD,
 	TILE,
 	TILEENTER,
+	UI,
 
 
-	UI = 31,
 	END = 32
 };
 

@@ -15,9 +15,9 @@ CScene::CScene() : m_pBG(nullptr), m_tFrame(FRAME{}), m_pBlack(nullptr), m_fFade
 m_bChangeScene(false),m_bExcuteOne(false), m_bExcuteTwo(false), m_bDontCopy(false)
 {
 	CPngManager::GetInst()->Insert_Png
-	(L"./\\Content\\Textures\\Black.png", L"Black");
+	(L"./\\Content\\Textures\\Black.png", L"FadeBlack");
 
-	m_pBlack = CPngManager::GetInst()->Find_Png(L"Black");
+	m_pBlack = CPngManager::GetInst()->Find_Png(L"FadeBlack");
 }
 CScene::~CScene()
 {
@@ -26,6 +26,19 @@ CScene::~CScene()
 
 void CScene::Render()
 {
+
+	//렌더 레이어
+	for (size_t i = 0; i < (int)RENDERID::RENDER_END; ++i)
+	{
+		for (auto& pObj : m_vecRenderList[i])
+		{
+			pObj->Render();
+		}
+			
+
+		m_vecRenderList[i].clear();
+	}
+
 	//오브젝트 타입 순회
 	for (int i = 0; i < (ULONG)eObjectType::END; ++i)
 	{
@@ -40,18 +53,12 @@ void CScene::Render()
 			//죽었으니 이레이즈
 			else
 			{
+				delete *iter;
 				iter = m_vecSceneObject[i].erase(iter);
 			}
 		}
 	}
-	//렌더 레이어
-	for (size_t i = 0; i < (int)RENDERID::RENDER_END; ++i)
-	{
-		for (auto& pObj : m_vecRenderList[i])
-			pObj->Render();
-
-		m_vecRenderList[i].clear();
-	}
+	
 }
 
 void CScene::AddvObject(CObject* _obj, eObjectType _type)
@@ -108,6 +115,7 @@ void CScene::DeleteAll()
 	{
 		DeleteGroup(eObjectType(i));
 	}
+	
 }
 
 

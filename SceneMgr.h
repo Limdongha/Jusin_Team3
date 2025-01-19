@@ -15,6 +15,8 @@ public:
 	void		Initialize();
 	void		Release();
 
+
+
 public:
 	CScene*		GetCurScene()	{ return m_pCurScene; }
 	CScene**	GetAllScene() { return m_pArrScene; }

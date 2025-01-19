@@ -23,7 +23,7 @@ void DH_CScore::Render()
 {
 	AlphaBlend(m_pCurPNG, 600, 150, 0, 0, 0, 0, 1.f);
 
-	CreateText(60, RGB(255, 255, 255), (int)WINCX / 2 + 10, 18, (int)SCROLLY);
+	CreateText(60, RGB(255, 255, 255), (int)WINCX / 2 + 10, 18, (int)SCROLLY - (int)SCROLLX);
 	CreateText(30, RGB(0, 0, 0), 210, 35, 0);
 }
 

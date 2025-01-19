@@ -11,6 +11,7 @@
 #include "EffectMgr.h"
 #include "SoundMgr.h"
 #include "UIMgr.h"
+#include "HW_CLineMgr.h"
 
 //전역 DC 선언
 HDC			g_memDC;
@@ -124,5 +125,6 @@ void CMainGame::Release()
 	DeleteDC(g_memDC);
 	DeleteObject(m_hBit);
 	CScrollMgr::Destroy_Instance();
+	HW_CLineMgr::Destroy_Instance();
 }
 

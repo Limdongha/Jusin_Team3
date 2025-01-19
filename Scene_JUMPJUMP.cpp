@@ -25,8 +25,7 @@ CScene_JUMPJUMP::CScene_JUMPJUMP() : m_iMaxHeight(0), m_iTileY(0), m_bExcuseOne(
 	m_pBG3 = CResMgr::GetInst()->LoadTexture
 	(L"Ground", L"./\\Content\\Textures\\BG\\JumpJumpGround.bmp");
 
-	CPngManager::GetInst()->Insert_Png
-	(L"./\\Content\\Textures\\Black.png", L"FadeBlack");
+	
 
 	m_pBlack = CPngManager::GetInst()->Find_Png(L"FadeBlack");
 	m_tStartTime = steady_clock::now();
@@ -128,7 +127,9 @@ void CScene_JUMPJUMP::Update()
 	//윈도우 종료
 	if (KEY_TAP(KEY::ESC))
 	{
+		DeleteAll();
 		PostQuitMessage(0);
+		return;
 	}
 
 #pragma endregion

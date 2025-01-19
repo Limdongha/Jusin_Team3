@@ -9,6 +9,7 @@ class CResMgr
 public:
 	void		Initialize();
 
+
 public:
 	wchar_t*		GetContentPath()	{ return m_szFilePath; }
 

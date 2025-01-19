@@ -61,61 +61,64 @@ void KL_CPlayer::Render()
 
 void KL_CPlayer::Update()
 {
-	
-	if (!GetbJump())
+	if (!GetbDie())
 	{
-		if (nullptr != m_pTarget)
+		if (!GetbJump())
 		{
-			
-
-			D3DXMATRIX	matScale, matRotZ, matTrans, matRevZ, matParent;
-			D3DXMatrixScaling(&matScale, 1.f, 1.f, 1.f);
-			m_fAngle -= D3DXToRadian(m_fRotateSpeed * 60);
-
-			D3DXMatrixRotationZ(&matRotZ, -D3DXToRadian(m_fAngle));
-
-			D3DXMatrixRotationZ(&matRevZ, -D3DXToRadian(m_fAngle) /2.f );
-
-			D3DXVECTOR3 targetPos = m_pTarget->GetInfo().vPos;
-			//targetPos.x += iScrollX;
-			
-			D3DXMatrixTranslation(&matTrans, -targetPos.x - m_fRadius  , -targetPos.y - m_fRadius, 0.f);
-
-			D3DXMatrixTranslation(&matParent, targetPos.x , targetPos.y, 0.f);
-		
-			m_tInfo.matWorld = matScale* matTrans * matRevZ * matParent;
-
-
-			for (int i = 0; i < 8; ++i)
+			if (nullptr != m_pTarget)
 			{
-				D3DXVec3TransformNormal(&m_vPoint[i], &m_vOriginPoint[i], &m_tInfo.matWorld);
+
+
+				D3DXMATRIX	matScale, matRotZ, matTrans, matRevZ, matParent;
+				D3DXMatrixScaling(&matScale, 1.f, 1.f, 1.f);
+				m_fAngle -= D3DXToRadian(m_fRotateSpeed * 90);
+
+				D3DXMatrixRotationZ(&matRotZ, -D3DXToRadian(m_fAngle));
+
+				D3DXMatrixRotationZ(&matRevZ, -D3DXToRadian(m_fAngle) / 2.f);
+
+				D3DXVECTOR3 targetPos = m_pTarget->GetInfo().vPos;
+				//targetPos.x += iScrollX;
+
+				D3DXMatrixTranslation(&matTrans, -targetPos.x - m_fRadius, -targetPos.y - m_fRadius, 0.f);
+
+				D3DXMatrixTranslation(&matParent, targetPos.x, targetPos.y, 0.f);
+
+				m_tInfo.matWorld = matScale * matTrans * matRevZ * matParent;
+
+
+				for (int i = 0; i < 8; ++i)
+				{
+					D3DXVec3TransformNormal(&m_vPoint[i], &m_vOriginPoint[i], &m_tInfo.matWorld);
+				}
+
+
+
+				D3DXVec3TransformCoord(&m_tInfo.vPos, &m_vOriginPos, &m_tInfo.matWorld);
+
+				m_tInfo.matWorld = matScale * matRotZ * matTrans * matRevZ * matParent;
+
+				D3DXVec3TransformNormal(&m_vGunPoint, &m_vOriginGunPoint, &m_tInfo.matWorld);
+
+
+				m_tInfo.vDir = m_vGunPoint / 40.f;
+
+
+				m_fRadius += 0.2f;
 			}
-
-			
-
-			D3DXVec3TransformCoord(&m_tInfo.vPos, &m_vOriginPos, &m_tInfo.matWorld);
-
-			m_tInfo.matWorld = matScale * matRotZ * matTrans * matRevZ * matParent;
-
-			D3DXVec3TransformNormal(&m_vGunPoint, &m_vOriginGunPoint, &m_tInfo.matWorld);
-
-
-			m_tInfo.vDir = m_vGunPoint / 40.f;
-		
-
-			m_fRadius += 0.2f;
 		}
-	}
 
-	else
- 		JumpIng();
+		else
+			JumpIng();
+	}
+	
 
 	
 }
 
 void KL_CPlayer::Initialize()
 {
-	m_tInfo.vPos = { 100.f, 350.f, 0.f };
+	m_tInfo.vPos = { 104.f, 450.f, 0.f };
 	SetfSpeed(3.f);
 	m_tInfo.vLook = { 0.f, -1.f, 0.f };
 
@@ -162,7 +165,7 @@ void KL_CPlayer::Offset()
 {
 
 	int		iOffSetminX = 0;
-	int		iOffSetmaxX = 400;
+	int		iOffSetmaxX = 320;
 
 	
 	

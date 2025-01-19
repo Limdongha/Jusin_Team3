@@ -24,5 +24,6 @@ private:
 	steady_clock::time_point		m_tCurTime;
 
 	int		m_iCountCreatePad; // 패드 생성 수 에 따라서 패드 위치 결정
+	bool	m_bSpawn;
 };
 
