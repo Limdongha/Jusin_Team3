@@ -12,6 +12,7 @@ public:
 
 	void		Set_DrawID(int _iDrawID) { m_iDrawID = _iDrawID; }
 	void		Set_Option(int _iOption) { m_iOption = _iOption; }
+	void		Set_UniqTile(bool _Uniq) { m_UniqTile = _Uniq; }
 
 public:
 	virtual void	Initialize() override;
@@ -19,6 +20,9 @@ public:
 	virtual void	Update();
 	virtual void	LateUpdate();
 	virtual void	Render();
+
+public:
+	void AlphaBlend(Image* _pImage, float _alpha);
 
 private:
 	int		m_iDrawID;
@@ -28,5 +32,9 @@ private:
 	INFO			m_vTileInfo;
 	D3DXVECTOR3		m_vTilePos;
 	D3DXVECTOR3		m_vTileOriginPos;
+
+
+private:
+	bool		m_UniqTile;
 };
 

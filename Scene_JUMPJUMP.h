@@ -28,13 +28,21 @@ private:
 	steady_clock::time_point		m_tCurTime;
 
 private:
+	
 	CTextures* m_pBG2;
+	CTextures* m_pBG3;
+
 	int		m_iMaxHeight;
 	int		m_iTileY;
 	int		m_iTileNum;
 	int		m_iBG1;
 	int		m_iBG2;
 	bool	m_bExcuseOne;
+	bool	m_bExcuseTwo;
+	bool	m_bExcuseThree;
+	bool	m_bGameOver;
 
+	float m_LastTileScrollY;
+	float m_ScrollThreshold;
 };
 
