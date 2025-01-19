@@ -5,10 +5,12 @@
 #include "SceneMgr.h"
 #include "MainGame.h"
 #include "ScrollMgr.h"
+#include "DH_CGage.h"
 
 
-DH_CPlayer::DH_CPlayer() : m_fAlngle(0), m_DHfSpeed(10), m_bRotate(true), m_fPosinAlngle(0), m_bAngleIncreasing(false)
-, m_fAngleLimit(D3DXToRadian(30.0f)), m_fCurrentTime(0), m_fOscillationSpeed(5.f)
+
+DH_CPlayer::DH_CPlayer() : m_fAlngle(0), m_DHfSpeed(10), m_fPosinAlngle(0), m_bAngleIncreasing(false)
+, m_fAngleLimit(D3DXToRadian(30.0f)), m_fCurrentTime(0), m_fOscillationSpeed(5.f), m_bCharge(false), m_DHfX(0)
 {
 	ZeroMemory(&m_vPlayerInfo, sizeof(INFO));
 	ZeroMemory(&m_vPosinInfo, sizeof(INFO));
@@ -17,6 +19,8 @@ DH_CPlayer::DH_CPlayer() : m_fAlngle(0), m_DHfSpeed(10), m_bRotate(true), m_fPos
 	ZeroMemory(&m_vPosinPoint, sizeof(D3DXVECTOR3));
 	ZeroMemory(&m_vPosinOriginPoint, sizeof(D3DXVECTOR3));
 
+
+	SetfJumpSpeed(0.f);
 	m_iPointNum = 7;
 	m_fRadius = 50.0f; // 5각형의 반지름
 	m_fAngleStep = 2 * D3DX_PI / m_iPointNum; // 각 꼭지점 간 각도 (라디안)
@@ -80,6 +84,9 @@ void DH_CPlayer::Update()
 	Change_Motion();
 	UpdateAngle();
 
+	//점프시 노말방향으로 x 이동
+	JumpNormalVector();
+
 	D3DXMATRIX matScale, matRotate, matTransform;
 
 	D3DXMatrixScaling(&matScale, 1.f, 1.f, 1.f);
@@ -115,8 +122,7 @@ void DH_CPlayer::Update()
 
 
 void DH_CPlayer::Render()
-{
-	
+{	
 	DrawPolygonCustom(m_vPlayerPoint, m_iPointNum, RGB(0,191,255));
 	DrawPolygonCustom(m_vPosinPoint, 3 , RGB(64, 224, 208));
 
@@ -131,7 +137,7 @@ void DH_CPlayer::Render()
 
 #pragma region 개발모드 출력
 
-	if (CMainGame::GetInst()->GetiEventBox() == 1)
+	if (CMainGame::GetInst()->GetiEventBox() == 0)
 	{
 		SetBkMode(g_memDC, TRANSPARENT); // 배경을 투명하게 설정
 		SetTextColor(g_memDC, RGB(255, 0, 140)); // 텍스트 색상
@@ -156,6 +162,9 @@ void DH_CPlayer::Render()
 
 		wchar_t scoreText07[50];
 		swprintf(scoreText07, 50, L"Player Direction: %s", GetiDirection() > 0 ? L"Right" : L"Left");
+
+		wchar_t scoreText08[50];
+		swprintf(scoreText08, 50, L"Player JumpSpeed: %f", GetfJumpSpeed());
 
 		TextOut(g_memDC,
 			WINCX / 2 + 200,
@@ -198,6 +207,12 @@ void DH_CPlayer::Render()
 			200,
 			scoreText07,
 			int(wcslen(scoreText07)));
+
+		TextOut(g_memDC,
+			WINCX / 2 + 200,
+			220,
+			scoreText08,
+			int(wcslen(scoreText08)));
 	}
 #pragma endregion
 
@@ -235,21 +250,21 @@ if (CMainGame::GetInst()->GetiEventBox() == 1)
 
 void DH_CPlayer::LateUpdate()
 {
-	if (GetiDirection() == -1)
+	if (GetbJumpSwitch() && m_fPosinAlngle < 0)
 		m_fAlngle -= D3DXToRadian(10.f);
-	if (GetiDirection() == 1)
+	if (GetbJumpSwitch() && m_fPosinAlngle > 0)
 		m_fAlngle += D3DXToRadian(10.f);
-	if (GetiDirection() == 0)
+	if (!GetbJumpSwitch())
 	{
-		if(m_bRotate)
+		if (m_fPosinAlngle > 0)
 			m_fAlngle += D3DXToRadian(1.f);
-		if (!m_bRotate)
+		if (m_fPosinAlngle < 0)
 			m_fAlngle -= D3DXToRadian(1.f);
 	}
 
 
 	//키 설정
-	if (m_bControl)
+	if (m_bControl && !GetbJumpSwitch())
 	{
 		KeyInput();
 	}
@@ -257,6 +272,7 @@ void DH_CPlayer::LateUpdate()
 	{
 		m_eCurState = STATE::IDLE;
 	}
+	
 	//무브 프레임
 	CObject::Move_Frame();
 
@@ -265,32 +281,48 @@ void DH_CPlayer::LateUpdate()
 
 void DH_CPlayer::KeyInput()
 {
-	if (KEY_HOLD(KEY::LEFT))
+	
+	if (m_eCurState != STATE::FALLING)
 	{
-		m_bRotate = false;
-		SetiDirection(-1);
-		AddPos(tVec2{ -m_DHfSpeed, 0 });
-	}
-	else if (KEY_HOLD(KEY::RIGHT))
-	{
-		m_bRotate = true;
-		SetiDirection(1);
-		AddPos(tVec2{ m_DHfSpeed, 0 });
-	}
-	else
-	{
-		SetiDirection(0);
-	}
+		if (KEY_TAP(KEY::SPACE))
+		{
+			DH_CGage* pGage = new DH_CGage;
+			pGage->SetName(L"Gage");
+			pGage->SetPos(GetPos());
+			pGage->SetScale(tVec2{ 500, 500 });
+			Create_Object(pGage, eObjectType::UI);
 
-	if (KEY_TAP(KEY::A))
-	{
-		m_fPosinAlngle -= D3DXToRadian(10.f);
-	}
+			m_bCharge = true;
+			SetfJumpSpeed(0.f);
+		}
+		if (KEY_HOLD(KEY::SPACE))
+		{
+			AddfJumpSpeed(0.5f);
+			//최대값 지정
+			if (GetfJumpSpeed() > 25.f)
+				SetfJumpSpeed(25.f);
+		}
+		if (KEY_AWAY(KEY::SPACE))
+		{
+			auto& UIGroup = CSceneMgr::GetInst()->GetCurScene()->GetUIGroup();
+			vector<CObject*>::iterator iter = UIGroup.begin();
+			for (; iter != UIGroup.end();)
+			{
+				if ((*iter)->GetName() == L"Gage")
+				{
+					delete (*iter);
+					iter = UIGroup.erase(iter);
+				}
+				else
+				{
+					++iter;
+				}
+			}
 
-	if (KEY_TAP(KEY::SPACE))
-	{
-		m_eCurState = STATE::JUMP;
-		SetbJump(true);
+			m_bCharge = false;
+			m_eCurState = STATE::JUMP;
+			SetbJump(true);
+		}
 	}
 
 	if (!GetbFalling() && !GetbJump())
@@ -302,11 +334,14 @@ void DH_CPlayer::KeyInput()
 
 void DH_CPlayer::UpdateAngle() 
 {
-	// 시간 업데이트
-	m_fCurrentTime += 0.02f;
+	if (!m_bCharge && !GetbJumpSwitch())
+	{
+		// 시간 업데이트
+		m_fCurrentTime += 0.02f;
 
-	// 각도 계산 (주기적으로 변화)
-	m_fPosinAlngle = m_fAngleLimit * sin(m_fCurrentTime * m_fOscillationSpeed);
+		// 각도 계산 (주기적으로 변화)
+		m_fPosinAlngle = m_fAngleLimit * sin(m_fCurrentTime * m_fOscillationSpeed);
+	}
 }
 
 
@@ -354,5 +389,24 @@ void DH_CPlayer::Physics()
 
 		//중력작용 (Falling 일때만)
 		CColliderMgr::GetInst()->PlayerGravityEx(player);
+	}
+}
+
+void DH_CPlayer::JumpNormalVector()
+{
+	if (GetbJumpSwitch())
+	{
+		m_DHfX = m_fPosinAlngle;
+
+		// 초기 속도와 각도 계산
+		float jumpSpeed = GetfJumpSpeed(); // 초기 속도
+		float gravity = GetfGravity();     // 중력
+		float angle = D3DXToRadian(m_fPosinAlngle);
+
+		// x축 이동 거리 계산
+		float velocityX = jumpSpeed * cosf(angle); // 초기 x축 속도
+
+		AddPos(tVec2{ velocityX * m_DHfX, 0.f });
+
 	}
 }

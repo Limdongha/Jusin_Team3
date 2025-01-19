@@ -125,7 +125,7 @@
     </Filter>
     <Filter Include="소스 파일\01.Mgr\07.TileMgr\01.DH_Tile">
       <UniqueIdentifier>{582f2804-d307-4adb-adb6-97d872ae2f0e}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="소스 파일\03.Object\00.Player\KL_Player">
       <UniqueIdentifier>{77fb6b6f-f8fb-4425-8925-0abe4b440d87}</UniqueIdentifier>
     </Filter>
@@ -135,6 +135,9 @@
     <Filter Include="소스 파일\리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="소스 파일\03.Object\08.UI">
+      <UniqueIdentifier>{3527e5e8-908b-43b9-b9a8-6c136df3e565}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -287,12 +290,21 @@
     </ClInclude>
     <ClInclude Include="DH_CTile.h">
       <Filter>소스 파일\01.Mgr\07.TileMgr\01.DH_Tile</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="KL_CPlayer.h">
       <Filter>소스 파일\03.Object\00.Player\KL_Player</Filter>
     </ClInclude>
     <ClInclude Include="CJumpPad.h">
       <Filter>소스 파일\03.Object\02. JumpPad</Filter>
+    </ClInclude>
+    <ClInclude Include="DH_CGage.h">
+      <Filter>소스 파일\03.Object\08.UI</Filter>
+    </ClInclude>
+    <ClInclude Include="DH_CGameOver.h">
+      <Filter>소스 파일\03.Object\08.UI</Filter>
+    </ClInclude>
+    <ClInclude Include="DH_CScore.h">
+      <Filter>소스 파일\03.Object\08.UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -412,12 +424,21 @@
     </ClCompile>
     <ClCompile Include="DH_CTile.cpp">
       <Filter>소스 파일\01.Mgr\07.TileMgr\01.DH_Tile</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="KL_CPlayer.cpp">
       <Filter>소스 파일\03.Object\00.Player\KL_Player</Filter>
     </ClCompile>
     <ClCompile Include="CJumpPad.cpp">
       <Filter>소스 파일\03.Object\02. JumpPad</Filter>
+    </ClCompile>
+    <ClCompile Include="DH_CGage.cpp">
+      <Filter>소스 파일\03.Object\08.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="DH_CGameOver.cpp">
+      <Filter>소스 파일\03.Object\08.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="DH_CScore.cpp">
+      <Filter>소스 파일\03.Object\08.UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -39,13 +39,13 @@ void CScene_ROUNDROUND::Enter()
 		
 		if (i % 2 == 0)
 		{
-			pJumpPad->SetPosVector(100 + 175 * i, 450);
+			pJumpPad->SetPosVector(float(100 + 175 * i), 450.f);
 			pJumpPad->SetRotateSpeed(2.f);
 		}
 			
 		else
 		{
-			pJumpPad->SetPosVector(100 + 175 * i, 350);
+			pJumpPad->SetPosVector(float(100 + 175 * i), 350.f);
 			pJumpPad->SetRotateSpeed(-2.f);
 		}
 			

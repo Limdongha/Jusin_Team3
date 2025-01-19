@@ -9,15 +9,21 @@
 #include "DH_CPlayer.h"
 #include "DH_CTile.h"
 #include "ScrollMgr.h"
+#include "DH_CGameOver.h"
+#include "DH_CScore.h"
+
 
 CScene_JUMPJUMP::CScene_JUMPJUMP() : m_iMaxHeight(0), m_iTileY(0), m_bExcuseOne(false), m_iTileNum(0), m_pBG2(nullptr)
-, m_iBG1(0), m_iBG2(-600)
+, m_iBG1(0), m_iBG2(-600), m_pBG3(nullptr), m_ScrollThreshold(100), m_LastTileScrollY(0), m_bExcuseTwo(false), m_bExcuseThree(false)
 {
 	m_pBG = CResMgr::GetInst()->LoadTexture
-	(L"Jump", L"./\\Content\\Textures\\BG\\JumpJump.bmp");
+	(L"Jump", L"./\\Content\\Textures\\BG\\JumpJump2.bmp");
 
 	m_pBG2 = CResMgr::GetInst()->LoadTexture
-	(L"Jump2", L"./\\Content\\Textures\\BG\\JumpJump.bmp");
+	(L"Jump2", L"./\\Content\\Textures\\BG\\JumpJump2.bmp");
+
+	m_pBG3 = CResMgr::GetInst()->LoadTexture
+	(L"Ground", L"./\\Content\\Textures\\BG\\JumpJumpGround.bmp");
 
 	CPngManager::GetInst()->Insert_Png
 	(L"./\\Content\\Textures\\Black.png", L"FadeBlack");
@@ -43,14 +49,22 @@ void CScene_JUMPJUMP::Enter()
 	pPlayer->Initialize();
 	Create_Object(pPlayer, eObjectType::PLAYER);
 
+	DH_CScore* pScore = new DH_CScore;
+	pScore->SetName(L"Score");
+	pScore->SetPos(tVec2{ WINCX / 2 - 100 , +20 });
+	pScore->SetScale(tVec2{ 390, 97 });
+	Create_Object(pScore, eObjectType::UI);
 
 #pragma region 첫 시작발판
 
-	DH_CTile* pTile = new DH_CTile;
-	pTile->SetPos(tVec2{ 400, 500 });
-	pTile->SetScale(tVec2{ 700,50 });
-	pTile->Initialize();
-	Create_Object(pTile, eObjectType::TILE);
+	for (int i = 0; i < 5; ++i)
+	{
+		DH_CTile* pTile = new DH_CTile;
+		pTile->SetPos(tVec2{ 0 + float(250 * i), 500 });
+		pTile->SetScale(tVec2{ 300,50 });
+		pTile->Initialize();
+		Create_Object(pTile, eObjectType::TILE);
+	}
 
 	DH_CTile* pTile2 = new DH_CTile;
 	pTile2->SetPos(tVec2{ 500, 300 });
@@ -85,6 +99,7 @@ void CScene_JUMPJUMP::Update()
 {
 	CheckAndCreateTiles();
 	UpdateMaxHeight();
+	//DeleteTile();
 
 	//음악 서서히 커지기
 	if (g_fVolume <= 1.f)
@@ -118,7 +133,23 @@ void CScene_JUMPJUMP::Update()
 
 #pragma endregion
 
-	CScene::Update();
+	auto& JPlayer = GetvSceneObj()[(int)eObjectType::PLAYER].front();
+	if (JPlayer->GetPos().fY + SCROLLY < 650)
+	{
+		CScene::Update();
+	}
+	else
+	{
+		if (!m_bExcuseTwo)
+		{
+			DH_CGameOver* pGameOver = new DH_CGameOver;
+			pGameOver->SetName(L"GameOver");
+			pGameOver->SetPos(tVec2{ WINCX / 2 - 175, WINCY / 2 - 150 });
+			pGameOver->SetScale(tVec2{ 500, 500 });
+			Create_Object(pGameOver, eObjectType::UI);
+			m_bExcuseTwo = true;
+		}
+	}
 }
 
 void CScene_JUMPJUMP::Render()
@@ -163,6 +194,21 @@ void CScene_JUMPJUMP::Render()
 		SRCCOPY
 	);
 
+	GdiTransparentBlt(
+		g_memDC,
+		0,
+		0 + (int)SCROLLY,
+		800,
+		600,
+		m_pBG3->GetDC(),
+		0,
+		0,
+		800,
+		600,
+		RGB(255,0,255)
+	);
+
+	
 	CScene::Render();
 	if (0 < m_fFade)
 		AlphaBlend(m_pBlack, m_fFade);
@@ -194,11 +240,6 @@ void CScene_JUMPJUMP::CreateRandomTile()
 				m_bExcuseOne = true;
 				break;
 			}
-			else if (tileY > playerY - 150)
-			{
-				m_bExcuseOne = true;
-				break; 
-			}
 			else
 			{
 				//조건 만족시 생성 스위치 on
@@ -208,12 +249,18 @@ void CScene_JUMPJUMP::CreateRandomTile()
 
 		// 스위치 ON 시 생성
 		if (!m_bExcuseOne)
-		{
+		{			
 			DH_CTile* pTile = new DH_CTile;
 
 			// 위치와 크기 설정
 			pTile->SetPos(tVec2{ (float)randomX, (float)tileY });
 			pTile->SetScale(tVec2{ 200, 50 });
+
+			if (!m_bExcuseThree)
+			{
+				pTile->Set_UniqTile(true);
+				m_bExcuseThree = true;
+			}
 
 			// 초기화 및 관리 리스트에 추가
 			pTile->Initialize();
@@ -225,6 +272,7 @@ void CScene_JUMPJUMP::CreateRandomTile()
 			m_bExcuseOne = true;
 		}
 	}
+	m_bExcuseThree = false;
 }
 
 void CScene_JUMPJUMP::CheckAndCreateTiles()
@@ -244,6 +292,13 @@ void CScene_JUMPJUMP::CheckAndCreateTiles()
 		{
 			CreateRandomTile();
 			m_tStartTime = m_tCurTime;
+		}
+		// 이전 생성된 스크롤 위치보다 일정 거리 올라왔을 경우 타일 생성
+		if (SCROLLY > m_LastTileScrollY + m_ScrollThreshold)
+		{
+			CreateRandomTile();
+			m_LastTileScrollY = SCROLLY; // 마지막 생성된 스크롤 값 업데이트
+			m_tStartTime = m_tCurTime; // 쿨타임 초기화
 		}
 	}
 }
@@ -266,7 +321,7 @@ void CScene_JUMPJUMP::DeleteTile()
 	for (auto it = Tile.begin(); it != Tile.end(); )
 	{
 		// 화면 아래로 벗어난 타일 삭제
-		if ((*it)->GetPos().fY > m_iMaxHeight + 400)
+		if ((*it)->GetPos().fY + SCROLLY > 650.f)
 		{
 			delete* it;
 			it = Tile.erase(it);
