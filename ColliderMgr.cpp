@@ -104,7 +104,7 @@ bool CColliderMgr::KL_CheckCircle(CObject* _Src, CObject* _Dst)
 
 	D3DXVECTOR3 temp = _Dst->GetInfo().vPos - _Src->GetInfo().vPos;
 
-	float fRadius = 95.f; // 반지름 합
+	float fRadius = 115.f; // 반지름 합
 
 	float fDiagonal = D3DXVec3Length(&temp); // 두 중점 거리
 
