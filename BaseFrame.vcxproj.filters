@@ -136,6 +136,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\03.Object\00.Player\HW_CPlayer">
+      <UniqueIdentifier>{70aad255-5545-4c3b-88a5-5f9e3a306af3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.Object\01.Monster\HW_CMonster">
+      <UniqueIdentifier>{55cf9bdd-0277-497a-97ce-b19ca30f309b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\12. LineMgr">
+      <UniqueIdentifier>{108e0215-95e0-4011-9645-215544db1294}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\01.Mgr\12. LineMgr\00. Line">
+      <UniqueIdentifier>{d0d17031-0ec0-44ed-a94e-5753cd770200}</UniqueIdentifier>
+    </Filter>
     <Filter Include="소스 파일\03.Object\08.UI">
       <UniqueIdentifier>{3527e5e8-908b-43b9-b9a8-6c136df3e565}</UniqueIdentifier>
     </Filter>
@@ -297,6 +309,18 @@
     <ClInclude Include="CJumpPad.h">
       <Filter>소스 파일\03.Object\02. JumpPad</Filter>
     </ClInclude>
+    <ClInclude Include="HW_CPlayer.h">
+      <Filter>소스 파일\03.Object\00.Player\HW_CPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="HW_CMonster.h">
+      <Filter>소스 파일\03.Object\01.Monster\HW_CMonster</Filter>
+    </ClInclude>
+    <ClInclude Include="HW_CLine.h">
+      <Filter>소스 파일\01.Mgr\12. LineMgr\00. Line</Filter>
+    </ClInclude>
+    <ClInclude Include="HW_CLineMgr.h">
+      <Filter>소스 파일\01.Mgr\12. LineMgr</Filter>
+    </ClInclude>
     <ClInclude Include="DH_CGage.h">
       <Filter>소스 파일\03.Object\08.UI</Filter>
     </ClInclude>
@@ -304,6 +328,9 @@
       <Filter>소스 파일\03.Object\08.UI</Filter>
     </ClInclude>
     <ClInclude Include="DH_CScore.h">
+      <Filter>소스 파일\03.Object\08.UI</Filter>
+    </ClInclude>
+    <ClInclude Include="DH_CSuperJump.h">
       <Filter>소스 파일\03.Object\08.UI</Filter>
     </ClInclude>
   </ItemGroup>
@@ -431,6 +458,18 @@
     <ClCompile Include="CJumpPad.cpp">
       <Filter>소스 파일\03.Object\02. JumpPad</Filter>
     </ClCompile>
+    <ClCompile Include="HW_CPlayer.cpp">
+      <Filter>소스 파일\03.Object\00.Player\HW_CPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="HW_CMonster.cpp">
+      <Filter>소스 파일\03.Object\01.Monster\HW_CMonster</Filter>
+    </ClCompile>
+    <ClCompile Include="HW_CLine.cpp">
+      <Filter>소스 파일\01.Mgr\12. LineMgr\00. Line</Filter>
+    </ClCompile>
+    <ClCompile Include="HW_CLineMgr.cpp">
+      <Filter>소스 파일\01.Mgr\12. LineMgr</Filter>
+    </ClCompile>
     <ClCompile Include="DH_CGage.cpp">
       <Filter>소스 파일\03.Object\08.UI</Filter>
     </ClCompile>
@@ -438,6 +477,9 @@
       <Filter>소스 파일\03.Object\08.UI</Filter>
     </ClCompile>
     <ClCompile Include="DH_CScore.cpp">
+      <Filter>소스 파일\03.Object\08.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="DH_CSuperJump.cpp">
       <Filter>소스 파일\03.Object\08.UI</Filter>
     </ClCompile>
   </ItemGroup>

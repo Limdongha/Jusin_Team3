@@ -152,6 +152,7 @@
     <ClInclude Include="DH_CGameOver.h" />
     <ClInclude Include="DH_CPlayer.h" />
     <ClInclude Include="DH_CScore.h" />
+    <ClInclude Include="DH_CSuperJump.h" />
     <ClInclude Include="DH_CTile.h" />
     <ClInclude Include="CJumpPad.h" />
     <ClInclude Include="EffectFactory.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="DH_CGameOver.cpp" />
     <ClCompile Include="DH_CPlayer.cpp" />
     <ClCompile Include="DH_CScore.cpp" />
+    <ClCompile Include="DH_CSuperJump.cpp" />
     <ClCompile Include="DH_CTile.cpp" />
     <ClCompile Include="CJumpPad.cpp" />
     <ClCompile Include="EffectFactory.cpp" />

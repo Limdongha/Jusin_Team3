@@ -1,6 +1,6 @@
 #pragma once
 #include "Player.h"
-
+class DH_CSuperJump;
 class DH_CPlayer :  public CPlayer
 {
 public:
@@ -19,6 +19,7 @@ public:
 	void			Offset();
 	void			Physics();
 	void			JumpNormalVector();
+	void			SuperJump();
 
 	void			AlphaBlend(Image* _pImage, int _Size, int _CustomSizeY, int _iOffsetX, int _iOffsetY, float _alpha);
 
@@ -39,11 +40,12 @@ private:
 	D3DXVECTOR3		m_vPosinPoint[3];
 	D3DXVECTOR3		m_vPosinOriginPoint[3];
 
-
+	DH_CSuperJump* m_pSuperJump;
 	float			m_fAlngle;
 	float			m_fPosinAlngle;
 	float			m_DHfSpeed;
 	float			m_DHfX;
+	float			m_DHFast;
 
 private:
 	int				m_iPointNum;
@@ -56,5 +58,6 @@ private:
 	float			m_fCurrentTime;
 	bool			m_bAngleIncreasing;
 	bool			m_bCharge;
+	bool			m_bExcuseOne;
 };
 

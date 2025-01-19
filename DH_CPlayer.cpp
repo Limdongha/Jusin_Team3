@@ -6,11 +6,16 @@
 #include "MainGame.h"
 #include "ScrollMgr.h"
 #include "DH_CGage.h"
-
+#include "DH_CTile.h"
+#include "DH_CSuperJump.h"
+#include "ResMgr.h"
+#include "Textures.h"
+#include "SoundMgr.h"
 
 
 DH_CPlayer::DH_CPlayer() : m_fAlngle(0), m_DHfSpeed(10), m_fPosinAlngle(0), m_bAngleIncreasing(false)
-, m_fAngleLimit(D3DXToRadian(30.0f)), m_fCurrentTime(0), m_fOscillationSpeed(5.f), m_bCharge(false), m_DHfX(0)
+, m_fAngleLimit(D3DXToRadian(30.0f)), m_fCurrentTime(0), m_fOscillationSpeed(5.f), m_bCharge(false), m_DHfX(0),
+m_bExcuseOne(false), m_pSuperJump(nullptr), m_DHFast(0)
 {
 	ZeroMemory(&m_vPlayerInfo, sizeof(INFO));
 	ZeroMemory(&m_vPosinInfo, sizeof(INFO));
@@ -26,6 +31,9 @@ DH_CPlayer::DH_CPlayer() : m_fAlngle(0), m_DHfSpeed(10), m_fPosinAlngle(0), m_bA
 	m_fAngleStep = 2 * D3DX_PI / m_iPointNum; // 각 꼭지점 간 각도 (라디안)
 	m_fCenterX = m_vPlayerInfo.vPos.x; // 중심 X 좌표
 	m_fCenterY = m_vPlayerInfo.vPos.y; // 중심 Y 좌표
+
+	m_pCurTex = CResMgr::GetInst()->LoadTexture
+	(L"JumpPlayer", L"./\\Content\\Textures\\Player\\Jump.bmp");
 }
 
 DH_CPlayer::~DH_CPlayer()
@@ -83,6 +91,7 @@ void DH_CPlayer::Update()
 	Physics();
 	Change_Motion();
 	UpdateAngle();
+	SuperJump();
 
 	//점프시 노말방향으로 x 이동
 	JumpNormalVector();
@@ -123,8 +132,8 @@ void DH_CPlayer::Update()
 
 void DH_CPlayer::Render()
 {	
-	DrawPolygonCustom(m_vPlayerPoint, m_iPointNum, RGB(0,191,255));
-	DrawPolygonCustom(m_vPosinPoint, 3 , RGB(64, 224, 208));
+	DrawPolygonCustom(m_vPlayerPoint, m_iPointNum, RGB(210,180,140));
+	DrawPolygonCustom(m_vPosinPoint, 3 , RGB(139, 69, 19));
 
 	for (int i = 0; i < m_iPointNum; ++i)
 	{
@@ -134,6 +143,20 @@ void DH_CPlayer::Render()
 			int(m_vPlayerPoint[i].x + 3.f),
 			int(m_vPlayerPoint[i].y + 3.f));
 	}
+
+	GdiTransparentBlt(
+		g_memDC,
+		int(m_vPlayerInfo.vPos.x - GetScale().fX / 2),
+		int(m_vPlayerInfo.vPos.y - GetScale().fY / 2),
+		100,
+		100,
+		m_pCurTex->GetDC(),
+		0,
+		0,
+		450,
+		450,
+		RGB(255, 0, 255)
+	);
 
 #pragma region 개발모드 출력
 
@@ -217,44 +240,15 @@ void DH_CPlayer::Render()
 #pragma endregion
 
 
-#pragma region 밟은 타일체크
-
-if (CMainGame::GetInst()->GetiEventBox() == 1)
-{
-	int TestLeft	= int(GetpCurTile()->GetPos().fX - GetpCurTile()->GetScale().fX / 2);
-	int TestRight	= int(GetpCurTile()->GetPos().fX + GetpCurTile()->GetScale().fX / 2);
-	int TestY		= int(GetpCurTile()->GetPos().fY - GetpCurTile()->GetScale().fY / 2);
-
-
-	HPEN newPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
-	HBRUSH newBrush = (HBRUSH)GetStockObject(HOLLOW_BRUSH);
-
-	HPEN oldPen = (HPEN)SelectObject(g_memDC, newPen);
-	HBRUSH oldBrush = (HBRUSH)SelectObject(g_memDC, newBrush);
-
-	Rectangle(
-		g_memDC,
-		int(TestLeft + SCROLLX),int(TestY - 5 + SCROLLY),
-
-		int(TestRight + SCROLLX),int(TestY + 5 + SCROLLY));
-
-	SelectObject(g_memDC, oldPen);
-	SelectObject(g_memDC, oldBrush);
-
-	DeleteObject(newBrush);
-	DeleteObject(newPen);
-}
-#pragma endregion
-
 }
 
 void DH_CPlayer::LateUpdate()
 {
 	if (GetbJumpSwitch() && m_fPosinAlngle < 0)
-		m_fAlngle -= D3DXToRadian(10.f);
+		m_fAlngle -= D3DXToRadian(30.f);
 	if (GetbJumpSwitch() && m_fPosinAlngle > 0)
-		m_fAlngle += D3DXToRadian(10.f);
-	if (!GetbJumpSwitch())
+		m_fAlngle += D3DXToRadian(30.f);
+	if (!GetbJumpSwitch() && m_DHFast == 0)
 	{
 		if (m_fPosinAlngle > 0)
 			m_fAlngle += D3DXToRadian(1.f);
@@ -282,10 +276,13 @@ void DH_CPlayer::LateUpdate()
 void DH_CPlayer::KeyInput()
 {
 	
-	if (m_eCurState != STATE::FALLING)
+	if (m_eCurState == STATE::IDLE)
 	{
 		if (KEY_TAP(KEY::SPACE))
 		{
+			CSoundMgr::GetInst()->StopSound(SOUND_EFFECT);
+			CSoundMgr::GetInst()->PlaySound(L"Charge.wav", SOUND_EFFECT, g_fVolume);
+
 			DH_CGage* pGage = new DH_CGage;
 			pGage->SetName(L"Gage");
 			pGage->SetPos(GetPos());
@@ -297,6 +294,9 @@ void DH_CPlayer::KeyInput()
 		}
 		if (KEY_HOLD(KEY::SPACE))
 		{
+			m_DHFast += 0.5;
+			m_fAlngle += D3DXToRadian(m_DHFast);
+
 			AddfJumpSpeed(0.5f);
 			//최대값 지정
 			if (GetfJumpSpeed() > 25.f)
@@ -304,6 +304,9 @@ void DH_CPlayer::KeyInput()
 		}
 		if (KEY_AWAY(KEY::SPACE))
 		{
+			CSoundMgr::GetInst()->StopSound(SOUND_EFFECT);
+			CSoundMgr::GetInst()->PlaySound(L"JumpSound.wav", SOUND_EFFECT, g_fVolume);
+
 			auto& UIGroup = CSceneMgr::GetInst()->GetCurScene()->GetUIGroup();
 			vector<CObject*>::iterator iter = UIGroup.begin();
 			for (; iter != UIGroup.end();)
@@ -319,6 +322,7 @@ void DH_CPlayer::KeyInput()
 				}
 			}
 
+			m_DHFast = 0;
 			m_bCharge = false;
 			m_eCurState = STATE::JUMP;
 			SetbJump(true);
@@ -329,6 +333,7 @@ void DH_CPlayer::KeyInput()
 	{
 		m_eCurState = STATE::IDLE;
 	}
+
 }
 
 
@@ -408,5 +413,77 @@ void DH_CPlayer::JumpNormalVector()
 
 		AddPos(tVec2{ velocityX * m_DHfX, 0.f });
 
+	}
+}
+
+void DH_CPlayer::SuperJump()
+{
+	if (dynamic_cast<DH_CTile*>(GetpCurTile())->GetbUniqTile() && m_eCurState == STATE::IDLE)
+	{
+		m_bControl = false;
+
+		if (!m_bExcuseOne)
+		{
+			CSoundMgr::GetInst()->StopSound(SOUND_EFFECT);
+			CSoundMgr::GetInst()->PlaySound(L"Charging.wav", SOUND_EFFECT, g_fVolume);
+
+			//돌림판 생성
+			m_pSuperJump = new DH_CSuperJump;
+			m_pSuperJump->SetName(L"SuperJump");
+			m_pSuperJump->SetPos(GetPos());
+			m_pSuperJump->SetScale(tVec2{ 150, 150 });
+			Create_Object(m_pSuperJump, eObjectType::UI);
+
+			m_bExcuseOne = true;
+		}
+
+		if (KEY_TAP(KEY::SPACE))
+		{
+			float fDot = m_pSuperJump->GetfDot() * -1;
+			if (0.8f < fDot && fDot < 1.2f)
+			{
+				CSoundMgr::GetInst()->StopSound(SOUND_EFFECT);
+				CSoundMgr::GetInst()->PlaySound(L"ChargeJump0.wav", SOUND_EFFECT, g_fVolume);
+
+				//슈퍼점프
+				m_bControl = true;
+
+				SetfJumpSpeed(30.f);
+				m_bCharge = false;
+				m_eCurState = STATE::JUMP;
+				SetbJump(true);
+				m_bExcuseOne = false;
+			}
+			else
+			{
+				CSoundMgr::GetInst()->StopSound(SOUND_EFFECT);
+				CSoundMgr::GetInst()->PlaySound(L"ChargeJump1.wav", SOUND_EFFECT, g_fVolume);
+				//그냥점프
+				m_bControl = true;
+
+				SetfJumpSpeed(15.f);
+				m_bCharge = false;
+				m_eCurState = STATE::JUMP;
+				SetbJump(true);
+				m_bExcuseOne = false;
+			}
+
+			//삭제 로직
+			auto& UIGroup = CSceneMgr::GetInst()->GetCurScene()->GetUIGroup();
+			vector<CObject*>::iterator iter = UIGroup.begin();
+			for (; iter != UIGroup.end();)
+			{
+				if ((*iter)->GetName() == L"SuperJump")
+				{
+					delete (*iter);
+					(*iter) = nullptr;
+					iter = UIGroup.erase(iter);
+				}
+				else
+				{
+					++iter;
+				}
+			}
+		}
 	}
 }

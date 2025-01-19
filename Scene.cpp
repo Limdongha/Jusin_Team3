@@ -26,6 +26,15 @@ CScene::~CScene()
 
 void CScene::Render()
 {
+	//렌더 레이어
+	for (size_t i = 0; i < (int)RENDERID::RENDER_END; ++i)
+	{
+		for (auto& pObj : m_vecRenderList[i])
+			pObj->Render();
+
+		m_vecRenderList[i].clear();
+	}
+
 	//오브젝트 타입 순회
 	for (int i = 0; i < (ULONG)eObjectType::END; ++i)
 	{
@@ -40,17 +49,10 @@ void CScene::Render()
 			//죽었으니 이레이즈
 			else
 			{
+				delete *iter;
 				iter = m_vecSceneObject[i].erase(iter);
 			}
 		}
-	}
-	//렌더 레이어
-	for (size_t i = 0; i < (int)RENDERID::RENDER_END; ++i)
-	{
-		for (auto& pObj : m_vecRenderList[i])
-			pObj->Render();
-
-		m_vecRenderList[i].clear();
 	}
 }
 

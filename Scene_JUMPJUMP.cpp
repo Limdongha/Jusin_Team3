@@ -15,19 +15,20 @@
 
 CScene_JUMPJUMP::CScene_JUMPJUMP() : m_iMaxHeight(0), m_iTileY(0), m_bExcuseOne(false), m_iTileNum(0), m_pBG2(nullptr)
 , m_iBG1(0), m_iBG2(-600), m_pBG3(nullptr), m_ScrollThreshold(100), m_LastTileScrollY(0), m_bExcuseTwo(false), m_bExcuseThree(false)
+, m_bGameOver(false)
 {
 	m_pBG = CResMgr::GetInst()->LoadTexture
 	(L"Jump", L"./\\Content\\Textures\\BG\\JumpJump2.bmp");
-
+	
 	m_pBG2 = CResMgr::GetInst()->LoadTexture
 	(L"Jump2", L"./\\Content\\Textures\\BG\\JumpJump2.bmp");
-
+	
 	m_pBG3 = CResMgr::GetInst()->LoadTexture
 	(L"Ground", L"./\\Content\\Textures\\BG\\JumpJumpGround.bmp");
-
+	
 	CPngManager::GetInst()->Insert_Png
 	(L"./\\Content\\Textures\\Black.png", L"FadeBlack");
-
+	
 	m_pBlack = CPngManager::GetInst()->Find_Png(L"FadeBlack");
 	m_tStartTime = steady_clock::now();
 
@@ -41,6 +42,10 @@ CScene_JUMPJUMP::~CScene_JUMPJUMP()
 
 void CScene_JUMPJUMP::Enter()
 {
+	g_fVolume = 0;
+	CSoundMgr::GetInst()->StopSound(SOUND_BGM);
+	CSoundMgr::GetInst()->PlayBGM(L"JumpBGSound.wav", g_fVolume);
+
 	m_bChangeScene = false;
 	m_fFade = 1.0f;
 
@@ -48,7 +53,7 @@ void CScene_JUMPJUMP::Enter()
 	pPlayer->SetPos(tVec2{ 400, 300 });
 	pPlayer->Initialize();
 	Create_Object(pPlayer, eObjectType::PLAYER);
-
+	
 	DH_CScore* pScore = new DH_CScore;
 	pScore->SetName(L"Score");
 	pScore->SetPos(tVec2{ WINCX / 2 - 100 , +20 });
@@ -97,10 +102,6 @@ void CScene_JUMPJUMP::Exit()
 
 void CScene_JUMPJUMP::Update()
 {
-	CheckAndCreateTiles();
-	UpdateMaxHeight();
-	//DeleteTile();
-
 	//음악 서서히 커지기
 	if (g_fVolume <= 1.f)
 	{
@@ -128,26 +129,40 @@ void CScene_JUMPJUMP::Update()
 	//윈도우 종료
 	if (KEY_TAP(KEY::ESC))
 	{
-		PostQuitMessage(0);
+		DeleteAll();
+		exit(123);
 	}
 
 #pragma endregion
 
-	auto& JPlayer = GetvSceneObj()[(int)eObjectType::PLAYER].front();
-	if (JPlayer->GetPos().fY + SCROLLY < 650)
+	auto& player = GetvSceneObj()[(int)eObjectType::PLAYER];
+	if (player.size() > 0)
 	{
-		CScene::Update();
-	}
-	else
-	{
-		if (!m_bExcuseTwo)
+		auto& JPlayer = GetvSceneObj()[(int)eObjectType::PLAYER].front();
+		if (JPlayer->GetPos().fY + SCROLLY < 650)
 		{
-			DH_CGameOver* pGameOver = new DH_CGameOver;
-			pGameOver->SetName(L"GameOver");
-			pGameOver->SetPos(tVec2{ WINCX / 2 - 175, WINCY / 2 - 150 });
-			pGameOver->SetScale(tVec2{ 500, 500 });
-			Create_Object(pGameOver, eObjectType::UI);
-			m_bExcuseTwo = true;
+			CheckAndCreateTiles();
+			UpdateMaxHeight();
+
+			CScene::Update();
+		}
+		else
+		{
+			if (!m_bExcuseTwo)
+			{
+				CSoundMgr::GetInst()->StopSound(SOUND_EFFECT);
+				CSoundMgr::GetInst()->PlaySound(L"Fail.wav", SOUND_EFFECT, g_fVolume);
+
+				DH_CGameOver* pGameOver = new DH_CGameOver;
+				pGameOver->SetName(L"GameOver");
+				pGameOver->SetPos(tVec2{ WINCX / 2 - 175, WINCY / 2 - 150 });
+				pGameOver->SetScale(tVec2{ 500, 500 });
+				Create_Object(pGameOver, eObjectType::UI);
+
+				player.front()->SetbArrive(false);
+
+				m_bExcuseTwo = true;
+			}
 		}
 	}
 }
@@ -193,7 +208,7 @@ void CScene_JUMPJUMP::Render()
 		0,
 		SRCCOPY
 	);
-
+	
 	GdiTransparentBlt(
 		g_memDC,
 		0,
@@ -258,7 +273,7 @@ void CScene_JUMPJUMP::CreateRandomTile()
 
 			if (!m_bExcuseThree)
 			{
-				pTile->Set_UniqTile(true);
+				pTile->SetbUniqTile(true);
 				m_bExcuseThree = true;
 			}
 

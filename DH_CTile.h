@@ -12,7 +12,10 @@ public:
 
 	void		Set_DrawID(int _iDrawID) { m_iDrawID = _iDrawID; }
 	void		Set_Option(int _iOption) { m_iOption = _iOption; }
-	void		Set_UniqTile(bool _Uniq) { m_UniqTile = _Uniq; }
+	
+public:
+	bool		GetbUniqTile() { return m_UniqTile; }
+	void		SetbUniqTile(bool _Uniq) { m_UniqTile = _Uniq; }
 
 public:
 	virtual void	Initialize() override;
