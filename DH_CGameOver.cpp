@@ -38,7 +38,7 @@ void DH_CGameOver::Render()
 	);
 
 
-	CreateText(L" ½ºÄÚ¾î : %d", 50, RGB(0, 0, 0), (int)WINCX / 2 - 10, 230, (int)SCROLLY);
+	CreateText(L" ½ºÄÚ¾î : %d", 50, RGB(0, 0, 0), (int)WINCX / 2 - 10, 230, (int)SCROLLY - int(SCROLLX));
 	CreateText(L" º° È¹µæ : %d", 30, RGB(0, 0, 0), (int)WINCX / 2 - 10, 300, 0);
 }
 

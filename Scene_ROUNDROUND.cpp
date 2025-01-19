@@ -72,6 +72,10 @@ void CScene_ROUNDROUND::Enter()
 	pScore->SetPos(tVec2{ WINCX / 2 - 100 , +20 });
 	pScore->SetScale(tVec2{ 390, 97 });
 	Create_Object(pScore, eObjectType::UI);
+
+	g_fVolume = 0;
+	CSoundMgr::GetInst()->StopSound(SOUND_BGM);
+	CSoundMgr::GetInst()->PlayBGM(L"RoundBGM.mp3", g_fVolume);
 }
 
 void CScene_ROUNDROUND::Exit()
@@ -140,6 +144,10 @@ void CScene_ROUNDROUND::Update()
 			pGameOver->SetScale(tVec2{ 500, 500 });
 			Create_Object(pGameOver, eObjectType::UI);
 			m_bSpawn = true;
+
+			CSoundMgr::GetInst()->StopSound(SOUND_EFFECT);
+			CSoundMgr::GetInst()->PlaySound(L"RoundFall.mp3", SOUND_EFFECT, 1.f);
+			
 		}
 
 	}

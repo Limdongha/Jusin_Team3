@@ -11,6 +11,7 @@
 #include "ScrollMgr.h"
 #include "DH_CGameOver.h"
 #include "DH_CScore.h"
+#include "SoundMgr.h"
 
 
 CScene_JUMPJUMP::CScene_JUMPJUMP() : m_iMaxHeight(0), m_iTileY(0), m_bExcuseOne(false), m_iTileNum(0), m_pBG2(nullptr)
