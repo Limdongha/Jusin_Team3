@@ -18,6 +18,9 @@
 #include "DH_CPlayer.h"
 #include "KL_CPlayer.h"
 #include "CJumpPad.h"
+#include "HW_CPlayer.h"
+#include "HW_CMonster.h"
+#include "KeyMgr.h"
 
 CColliderMgr::CColliderMgr() : m_Gravity(9.8f), m_fTime(0), m_bEffectCreated(false), m_bPlayerDead(false),
 m_bJumpLimit(false), m_bSound(false), m_SoundStart(0), m_bCollisionCooldown(true)
@@ -132,7 +135,6 @@ void CColliderMgr::KL_CollisionCircle(CObject* _Src, vector<CObject*> _Dst)
 	if (static_cast<KL_CPlayer*>(_Src)->GetbJump())
 		return;
 
-
 	static_cast<KL_CPlayer*>(_Src)->SetTarget(nullptr);
 	for (auto& Dst : _Dst)
 	{
@@ -147,8 +149,107 @@ void CColliderMgr::KL_CollisionCircle(CObject* _Src, vector<CObject*> _Dst)
 	}
 	
 	CSceneMgr::GetInst()->GetCurScene()->DeletePlayerGroup();
-	
 }
+
+
+void CColliderMgr::HW_CollisionCircle(CObject* _Src, CObject* _Dst)
+{
+	D3DXVECTOR3 collisionDir;
+
+	if (HW_CheckCircleEx(_Src, _Dst, &collisionDir))
+	{
+		// 충돌 시 이벤트
+		// 
+		// #01. 플레이어 사망
+		//CSceneMgr::GetInst()->GetCurScene()->DeletePlayerGroup();
+
+
+		//# 플레이어 좌표
+		float fPlayerX = static_cast<HW_CPlayer*>(_Src)->GetInfo().vPos.x;
+		float fPlayerY = static_cast<HW_CPlayer*>(_Src)->GetInfo().vPos.y;
+
+		//# 몬스터 좌표
+		float fMosterX = static_cast<HW_CMonster*>(_Dst)->GetInfo().vPos.x;
+		float fMonsterY = static_cast<HW_CMonster*>(_Dst)->GetInfo().vPos.y;
+
+	
+		// 좌 충돌
+		if (fPlayerX < fMosterX)
+		{
+			//CSceneMgr::GetInst()->GetCurScene()->DeletePlayerGroup();
+
+		}
+		// 우 충돌 (우 충돌은 없음)
+		/*if (fPlayerX > fMosterX)
+		{
+
+		}*/
+
+		// 상 충돌
+		if (fPlayerY < fMonsterY)
+		{
+			CSceneMgr::GetInst()->GetCurScene()->DeleteGroup(eObjectType::MONSTER);
+			//_Dst->SetbArrive(false);
+		
+			static_cast<HW_CPlayer*>(_Src)->SetbDoubleJump(true);
+			
+			int JumpCount = static_cast<HW_CPlayer*>(_Src)->Get_JumpCount();
+
+			if (JumpCount < 3)
+			{
+				static_cast<HW_CPlayer*>(_Src)->Set_JumpCount(++JumpCount);
+			}
+
+		}
+	}
+}
+
+bool CColliderMgr::HW_CheckCircleEx(CObject* _Src, CObject* _Dst, D3DXVECTOR3* _collisionDir)
+{
+	float fRadius = static_cast<HW_CPlayer*>(_Src)->Get_Radius() + static_cast<HW_CMonster*>(_Dst)->Get_Radius();
+	D3DXVECTOR3 temp = _Dst->GetInfo().vPos - _Src->GetInfo().vPos;
+
+	float fDiagonal = D3DXVec3Length(&temp);
+
+	if (_collisionDir)
+	{
+		// 충돌 방향 벡터 계산
+		*_collisionDir = temp / fDiagonal;
+	}
+	return fDiagonal <= fRadius;
+}
+
+bool CColliderMgr::HW_CheckCircle(CObject* _Src, CObject* _Dst)
+{
+	// 두 객체의 반지름 합
+	float fRadius = static_cast<HW_CPlayer*>(_Src)->Get_Radius() - static_cast<HW_CMonster*>(_Dst)->Get_Radius();
+
+	// 거리 계산
+	D3DXVECTOR3 temp = _Dst->GetInfo().vPos - _Src->GetInfo().vPos;
+	float fDiagonal = D3DXVec3Length(&temp); // 두 중점 거리
+	return fRadius >= fDiagonal;
+}
+
+bool CColliderMgr::HW_Check_Rect(CObject* _Src, CObject* _Dst, float* pX, float* pY)
+{
+	float fX = abs(_Src->GetInfo().vPos.x - _Dst->GetInfo().vPos.x);
+	float fY = abs(_Src->GetInfo().vPos.y - _Dst->GetInfo().vPos.y);
+
+	float fRadiusX = static_cast<HW_CPlayer*>(_Src)->Get_Radius() - static_cast<HW_CMonster*>(_Dst)->Get_Radius();
+	float fRadiusY = static_cast<HW_CPlayer*>(_Src)->Get_Radius() - static_cast<HW_CMonster*>(_Dst)->Get_Radius();
+
+	if ((fRadiusX >= fX) && (fRadiusY >= fY))
+	{
+		*pX = fRadiusX - fX;
+		*pY = fRadiusY - fY;
+		return true;
+	}
+
+	return false;
+}
+
+
+
 
 
 //���浹

@@ -100,27 +100,27 @@ void CEventMgr::Render()
 		float ScrollX = CScrollMgr::Get_Instance()->Get_ScrollX();
 		float ScrollY = CScrollMgr::Get_Instance()->Get_ScrollY();
 
-		if (player.size() > 0)
-		{
-			Rectangle(g_memDC,
-				int(player.front()->GetPos().fX - player.front()->GetScale().fX / 2.f + ScrollX),
-				int(player.front()->GetPos().fY - player.front()->GetScale().fY / 2.f + ScrollY),
-				int(player.front()->GetPos().fX + player.front()->GetScale().fX / 2.f + ScrollX),
-				int(player.front()->GetPos().fY + player.front()->GetScale().fY / 2.f + ScrollY));
-		}
-
-
-		if (monsters.size() > 0)
-		{
-			for (auto& mob : monsters)
-			{
-				Rectangle(g_memDC,
-					int(mob->GetPos().fX - mob->GetScale().fX / 2.f + ScrollX),
-					int(mob->GetPos().fY - mob->GetScale().fY / 2.f + ScrollY),
-					int(mob->GetPos().fX + mob->GetScale().fX / 2.f + ScrollX),
-					int(mob->GetPos().fY + mob->GetScale().fY / 2.f + ScrollY));
-			}
-		}
+		//if (player.size() > 0)
+		//{
+		//	Rectangle(g_memDC,
+		//		int(player.front()->GetPos().fX - player.front()->GetScale().fX / 2.f + ScrollX),
+		//		int(player.front()->GetPos().fY - player.front()->GetScale().fY / 2.f + ScrollY),
+		//		int(player.front()->GetPos().fX + player.front()->GetScale().fX / 2.f + ScrollX),
+		//		int(player.front()->GetPos().fY + player.front()->GetScale().fY / 2.f + ScrollY));
+		//}
+		//
+		//
+		//if (monsters.size() > 0)
+		//{
+		//	for (auto& mob : monsters)
+		//	{
+		//		Rectangle(g_memDC,
+		//			int(mob->GetPos().fX - mob->GetScale().fX / 2.f + ScrollX),
+		//			int(mob->GetPos().fY - mob->GetScale().fY / 2.f + ScrollY),
+		//			int(mob->GetPos().fX + mob->GetScale().fX / 2.f + ScrollX),
+		//			int(mob->GetPos().fY + mob->GetScale().fY / 2.f + ScrollY));
+		//	}
+		//}
 
 		SelectObject(g_memDC, oldPen);
 		SelectObject(g_memDC, oldBrush);

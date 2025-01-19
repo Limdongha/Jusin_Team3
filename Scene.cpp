@@ -40,6 +40,7 @@ void CScene::Render()
 			//죽었으니 이레이즈
 			else
 			{
+				delete* iter;
 				iter = m_vecSceneObject[i].erase(iter);
 			}
 		}

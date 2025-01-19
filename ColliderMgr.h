@@ -43,6 +43,18 @@ public:
 	bool		KL_CheckCircle(CObject* _Src, CObject* _Dst);
 	void		KL_CollisionCircle(CObject* _Src, vector <CObject*> _Dst);
 
+
+public:
+	void HW_CollisionCircle(CObject* _Src, CObject* _Dst);
+
+	bool HW_CheckCircleEx(CObject* _Src, CObject* _Dst, D3DXVECTOR3* _collisionDir);
+	bool HW_CheckCircle(CObject* _Src, CObject* _Dst);
+	bool HW_Check_Rect(CObject* _Src, CObject* _Dst, float* pX, float* pY);
+
+
+
+
+
 private:
 	float		m_Gravity;
 	float		m_fTime;
