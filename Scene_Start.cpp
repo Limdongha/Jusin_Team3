@@ -56,9 +56,6 @@ void CScene_Start::Enter()
 	SpawnPlayer(WINCX / 2 + 400, WINCY / 2 - 100.f);
 	CUIMgr::GetInst()->SetUION(true);
 
-	g_fVolume = 0;
-	CSoundMgr::GetInst()->StopSound(SOUND_BGM);
-	CSoundMgr::GetInst()->PlayBGM(L"DemonCastle.wav", g_fVolume);
 }
 
 void CScene_Start::Update()
