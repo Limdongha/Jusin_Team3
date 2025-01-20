@@ -43,6 +43,11 @@ CScene_JUMPJUMP::~CScene_JUMPJUMP()
 
 void CScene_JUMPJUMP::Enter()
 {
+	CScrollMgr::Get_Instance()->Set_ScrollX(0);
+	CScrollMgr::Get_Instance()->Set_ScrollY(0);
+	m_iBG1 = 0;
+	m_iBG2 = -600;
+
 	g_fVolume = 0;
 	CSoundMgr::GetInst()->StopSound(SOUND_BGM);
 	CSoundMgr::GetInst()->PlayBGM(L"JumpBGSound.wav", g_fVolume);

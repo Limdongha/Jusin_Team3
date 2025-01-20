@@ -77,6 +77,9 @@ void CScene_RUNRUN::Update()
 	if (Get_GameOver())
 	{
 		Set_Point(0);
+		m_iBG1 = 0;
+		m_iBG2 = 800;
+		m_bGameOver = false;
 	}
 	else
 	{

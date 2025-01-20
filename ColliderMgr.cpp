@@ -161,7 +161,10 @@ void CColliderMgr::HW_CollisionCircle(CObject* _Src, vector<CObject*> _Dst)
 			{
 				static_cast<CScene_RUNRUN*>(CSceneMgr::GetInst()->GetCurScene())->Set_Point(0);
 			
-				_Src->SetPosVector(abs((int)CScrollMgr::Get_Instance()->Get_ScrollX()),  200.f);
+				_Src->SetPosVector(100.f,  400.f);
+
+				CScrollMgr::Get_Instance()->Set_ScrollX(0);
+				static_cast<HW_CPlayer*>(_Src)->Set_JumpCount(0);
 				
 				static_cast<CScene_RUNRUN*>(CSceneMgr::GetInst()->GetCurScene())->Set_GameOver(true);
 
