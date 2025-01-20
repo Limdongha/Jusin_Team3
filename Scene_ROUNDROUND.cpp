@@ -213,8 +213,11 @@ void CScene_ROUNDROUND::Render()
 void CScene_ROUNDROUND::CreateJumpPad()
 {
 	
-	
-	auto& pPlayer = GetvSceneObj()[(ULONG)eObjectType::PLAYER].front();
+	if (nullptr == CSceneMgr::GetInst()->GetPlayer())
+	{
+		return;
+	}
+		auto& pPlayer = GetvSceneObj()[(ULONG)eObjectType::PLAYER].front();
 
 	auto& Tile = GetvSceneObj()[(ULONG)eObjectType::TILE];
 
@@ -244,7 +247,11 @@ void CScene_ROUNDROUND::CreateJumpPad()
 
 void CScene_ROUNDROUND::DeleteJumpPad()
 {
-	
+	if (nullptr == CSceneMgr::GetInst()->GetPlayer())
+	{
+		return;
+	}
+
 	auto& pPlayer = GetvSceneObj()[(ULONG)eObjectType::PLAYER].front();
 
 	auto& Tile = GetvSceneObj()[(ULONG)eObjectType::TILE];

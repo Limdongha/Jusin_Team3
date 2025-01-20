@@ -16,10 +16,10 @@
 CScene_RUNRUN::CScene_RUNRUN() : m_pBG2(nullptr), m_iBG1(0), m_iBG2(800)
 {
 	m_pBG = CResMgr::GetInst()->LoadTexture
-	(L"Jump", L"./\\Content\\Textures\\BG\\JumpJump.bmp");
+	(L"Run", L"./\\Content\\Textures\\BG\\JumpJump.bmp");
 
 	m_pBG2 = CResMgr::GetInst()->LoadTexture
-	(L"Jump2", L"./\\Content\\Textures\\BG\\JumpJump.bmp");
+	(L"Run2", L"./\\Content\\Textures\\BG\\JumpJump.bmp");
 
 	CPngManager::GetInst()->Insert_Png
 	(L"./\\Content\\Textures\\Black.png", L"FadeBlack");

@@ -131,7 +131,7 @@ void CColliderMgr::KL_CollisionCircle(CObject* _Src, vector<CObject*> _Dst)
 		}
 	}
 	
-	CSceneMgr::GetInst()->GetCurScene()->DeletePlayerGroup();
+	CSceneMgr::GetInst()->GetPlayer()->SetbDie(true);
 }
 
 
