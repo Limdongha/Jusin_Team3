@@ -115,6 +115,14 @@ void CScene_ROUNDROUND::Update()
 		CMainGame::GetInst()->SetiEventBox(0);
 	}
 
+	if (KEY_TAP(KEY::R))
+	{
+		
+		Change_Scene(eSceneType::SCENE_ROUNDROUND);
+		
+	}
+
+
 	if (m_bChangeScene && m_fFade == 1.f)
 	{
 		Exit();
