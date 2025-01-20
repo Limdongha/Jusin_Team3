@@ -20,7 +20,7 @@ public:
 	tObjInfo*			Get_Info_Pointer()	{ return &m_tObjInfo; }
 	tVec2				GetPos()			{ return m_tObjInfo.tPos; }
 	tVec2				GetScale()			{ return m_tObjInfo.tScale; }
-	bool				GetbArrive()		{ return m_bArrive; }
+	bool				GetbArrive()		{ return m_bArrive; } 
 	bool				GetbFalling()		{ return m_bFalling; }
 	const wstring		GetName()			{ return m_strName; }
 	CObject*			GetpCurTile()		{ return m_pCurTile; }

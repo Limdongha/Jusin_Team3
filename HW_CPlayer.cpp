@@ -33,7 +33,7 @@ void HW_CPlayer::Initialize()
 	m_vPoint[3] = { -25.f, 25.f, 0.f };
 
 	m_fSpeed = 4.f;
-	m_fJumpPower = 28.f;
+	m_fJumpPower = 30.f;
 	
 	fPlayerRadius = 25.f;
 
@@ -107,17 +107,16 @@ void HW_CPlayer::Render()
 			30);
 	}
 	
-	SetBkMode(g_memDC, TRANSPARENT); // 배경을 투명하게 설정
-	SetTextColor(g_memDC, RGB(255, 0, 140)); // 텍스트 색상
+	//SetBkMode(g_memDC, TRANSPARENT); // 배경을 투명하게 설정
+	//SetTextColor(g_memDC, RGB(255, 0, 140)); // 텍스트 색상
 
-	wchar_t scoreText01[30];
+	/*wchar_t scoreText01[30];
 	swprintf(scoreText01, 30, L"플레이어 반지름: %.2f", fPlayerRadius);
 	TextOut(g_memDC,
 		WINCX / 2 + 200,
 		80,
 		scoreText01,
 		int(wcslen(scoreText01)));
-
 
 	wchar_t scoreText02[30];
 	swprintf(scoreText02, 30, L"플레이어 vPos.y: %.2f", m_tInfo.vPos.y);
@@ -142,6 +141,14 @@ void HW_CPlayer::Render()
 		140,
 		scoreText04,
 		int(wcslen(scoreText04)));
+
+	wchar_t scoreText05[30];
+	swprintf(scoreText05, 30, L"더블 점프 : %d", m_iJumpCount);
+	TextOut(g_memDC,
+		WINCX / 2 + 200,
+		220,
+		scoreText05,
+		int(wcslen(scoreText05)));*/
 }
 
 void HW_CPlayer::Release()
@@ -152,18 +159,18 @@ void HW_CPlayer::Key_Input()
 {
 	D3DXVec3TransformNormal(&m_tInfo.vDir, &m_tInfo.vLook, &m_tInfo.matWorld);
 
-	//m_tInfo.vPos += m_tInfo.vDir * m_fSpeed;
+	m_tInfo.vPos += m_tInfo.vDir * m_fSpeed;
 
 	#pragma region 테스트중
-	if (KEY_HOLD(KEY::RIGHT))
-	{
-		m_tInfo.vPos += m_tInfo.vDir * m_fSpeed;
-	}
+	//if (KEY_HOLD(KEY::RIGHT))
+	//{
+	//	m_tInfo.vPos += m_tInfo.vDir * m_fSpeed;
+	//}
 
-	if (KEY_HOLD(KEY::LEFT))
-	{
-		m_tInfo.vPos -= m_tInfo.vDir * m_fSpeed;
-	}
+	//if (KEY_HOLD(KEY::LEFT))
+	//{
+	//	m_tInfo.vPos -= m_tInfo.vDir * m_fSpeed;
+	//}
 	#pragma endregion
 
 	if (KEY_TAP(KEY::SPACE))
@@ -176,22 +183,21 @@ void HW_CPlayer::Key_Input()
 		{
 			if (m_iJumpCount > 0)
 			{
-				
-				if(m_bDoubleJump)
-				{
-					--m_iJumpCount;
-					SetbJump(true);
-					SetfTime(0.f);
-					m_bDoubleJump = false;
-				}
+				m_bDoubleJump = true;
+			}
+			else
+			{
+				m_bDoubleJump = false;
+			}
 
-
-
+			if (m_bDoubleJump)
+			{
+				--m_iJumpCount;
+				SetbJump(true);
+				SetfTime(0.f);
+				m_bDoubleJump = false;
 			}
 		}
-		
-		
-
 	}
 
 	if (KEY_HOLD(KEY::F1))
@@ -214,13 +220,13 @@ void HW_CPlayer::Jumping()
 
 		if (bLineCol && (fY < m_tInfo.vPos.y))
 		{
-			SetbJump(false);
+  			SetbJump(false);
 			SetfTime(0.f);
 			m_tInfo.vPos.y = fY;
 		}
 	}
 
-	else if (bLineCol)
+	else if (bLineCol) 
 	{
 		m_tInfo.vPos.y = fY;
 	}
