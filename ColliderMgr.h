@@ -45,7 +45,7 @@ public:
 
 
 public:
-	void HW_CollisionCircle(CObject* _Src, CObject* _Dst);
+	void HW_CollisionCircle(CObject* _Src, vector<CObject*> _Dst);
 
 	bool HW_CheckCircleEx(CObject* _Src, CObject* _Dst, D3DXVECTOR3* _collisionDir);
 	bool HW_CheckCircle(CObject* _Src, CObject* _Dst);

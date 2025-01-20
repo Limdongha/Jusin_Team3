@@ -16,9 +16,13 @@ public:
 	void		Release()override;
 
 public:
+	void Jumping();
+
+public:
 	float Get_Radius() { return m_fMonsterRadius; }
 	float Get_fTopY() { return m_fTopY; }
 	float Get_fBottomY() { return m_fBottomY; }
+	
 
 
 	float m_fTopY;

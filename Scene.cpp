@@ -58,7 +58,6 @@ void CScene::Render()
 			}
 		}
 	}
-	
 }
 
 void CScene::AddvObject(CObject* _obj, eObjectType _type)

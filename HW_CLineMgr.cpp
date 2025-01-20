@@ -17,18 +17,29 @@ HW_CLineMgr::~HW_CLineMgr()
 
 void HW_CLineMgr::Initialize()
 {
-	LINEPOINT tLinePoint[4]
+	LINEPOINT tLinePoint[10]
 	{
 		{ 0.f , 450.f},
-		{ 400.f , 450.f},
-		{ 700.f , 450.f },
-		{ 1000.f , 450.f }
+		{ 2000.f , 450.f},
+		{ 4000.f , 450.f },
+		{ 6000.f , 450.f },
+		{ 8000.f , 450.f },
+		{ 10000.f , 450.f },
+		{ 12000.f , 450.f },
+		{ 14000.f , 450.f },
+		{ 16000.f , 450.f },
+		{ 18000.f , 450.f }
 	};
 
 	m_Linelist.push_back(new HW_CLine(tLinePoint[0], tLinePoint[1]));
 	m_Linelist.push_back(new HW_CLine(tLinePoint[1], tLinePoint[2]));
 	m_Linelist.push_back(new HW_CLine(tLinePoint[2], tLinePoint[3]));
-
+	m_Linelist.push_back(new HW_CLine(tLinePoint[3], tLinePoint[4]));
+	m_Linelist.push_back(new HW_CLine(tLinePoint[4], tLinePoint[5]));
+	m_Linelist.push_back(new HW_CLine(tLinePoint[5], tLinePoint[6]));
+	m_Linelist.push_back(new HW_CLine(tLinePoint[6], tLinePoint[7]));
+	m_Linelist.push_back(new HW_CLine(tLinePoint[7], tLinePoint[8]));
+	m_Linelist.push_back(new HW_CLine(tLinePoint[8], tLinePoint[9]));
 }
 
 void HW_CLineMgr::Render()

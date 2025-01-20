@@ -3,6 +3,7 @@
 #include "SceneMgr.h"
 #include "HW_CPlayer.h"
 #include "ScrollMgr.h"
+#include "HW_CLineMgr.h"
 
 
 HW_CMonster::HW_CMonster() : m_fSpeed(0.f), m_fMonsterRadius(0.f), m_fTopY(0.f), m_fBottomY(0.f)
@@ -16,24 +17,30 @@ HW_CMonster::~HW_CMonster()
 
 void HW_CMonster::Initialize()
 {
-	m_tInfo.vPos = { 300.f, 420.f, 0.f };
+	m_tInfo.vPos = { 300.f, 400.f, 0.f };
 	m_tInfo.vLook = {1.f, 0.f, 0.f};
-	m_fSpeed = 2.f;
 	m_fMonsterRadius = 20.f; // 몬스터 반지름 고정
-
+	SetfSpeed(2.f);
 	m_eRender = RENDERID::RENDER_MONSTER;	
 }
 
-
 void HW_CMonster::Update()
 {
-	// 플레이어 이동
+	if (abs((int)CScrollMgr::Get_Instance()->Get_ScrollX()) > 1500)
+	{
+		SetfSpeed(8.f);
+	}
+	else if (abs((int)CScrollMgr::Get_Instance()->Get_ScrollX()) > 800)
+	{
+		SetfSpeed(6.f);
+	}
+
+	// 몬스터 이동
 	m_tInfo.vDir = { -1.f, 0.f, 0.f };
-	//m_tInfo.vPos += m_tInfo.vDir * m_fSpeed;
+	m_tInfo.vPos += m_tInfo.vDir * GetfSpeed();
 	
 	m_fTopY = m_tInfo.vPos.y - m_fMonsterRadius;
 	m_fBottomY = m_tInfo.vPos.y + m_fMonsterRadius;
-
 
 	#pragma region 추적
 	//GETPLAYER
@@ -64,7 +71,6 @@ void HW_CMonster::Render()
 	int		iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
 
 	
-
 	if (HW_CPlayer::m_bColliderBox)
 	{
 		HPEN hPen = CreatePen(PS_SOLID, 1, RGB(255, 0, 0));
@@ -94,37 +100,67 @@ void HW_CMonster::Render()
 		int(m_tInfo.vPos.y - m_fMonsterRadius)
 		);
 
-	SetBkMode(g_memDC, TRANSPARENT); // 배경을 투명하게 설정
-	SetTextColor(g_memDC, RGB(255, 0, 140)); // 텍스트 색상
+	//wchar_t scoreText01[30];
+	//swprintf(scoreText01, 30, L"몬스터 반지름: %.2f", m_fMonsterRadius);
+	//TextOut(g_memDC,
+	//	WINCX / 2 + 200,
+	//	160,
+	//	scoreText01,
+	//	int(wcslen(scoreText01)));
 
-	wchar_t scoreText01[30];
-	swprintf(scoreText01, 30, L"몬스터 반지름: %.2f", m_fMonsterRadius);
-	TextOut(g_memDC,
-		WINCX / 2 + 200,
-		160,
-		scoreText01,
-		int(wcslen(scoreText01)));
-
-	wchar_t scoreText02[30];
-	swprintf(scoreText02, 30, L"몬스터 Y 상: %.2f", m_tInfo.vPos.y - m_fMonsterRadius);
-	TextOut(g_memDC,
-		WINCX / 2 + 200,
-		180,
-		scoreText02,
-		int(wcslen(scoreText02)));
+	//wchar_t scoreText02[30];
+	//swprintf(scoreText02, 30, L"몬스터 Y 상: %.2f", m_tInfo.vPos.y - m_fMonsterRadius);
+	//TextOut(g_memDC,
+	//	WINCX / 2 + 200,
+	//	180,
+	//	scoreText02,
+	//	int(wcslen(scoreText02)));
 
 
-	wchar_t scoreText03[30];
-	swprintf(scoreText03, 30, L"몬스터 Y 하: %.2f", m_tInfo.vPos.y + m_fMonsterRadius);
-	TextOut(g_memDC,
-		WINCX / 2 + 200,
-		200,
-		scoreText03,
-		int(wcslen(scoreText03)));
+	//wchar_t scoreText03[30];
+	//swprintf(scoreText03, 30, L"몬스터 Y 하: %.2f", m_tInfo.vPos.y + m_fMonsterRadius);
+	//TextOut(g_memDC,
+	//	WINCX / 2 + 200,
+	//	200,
+	//	scoreText03,
+	//	int(wcslen(scoreText03)));
+	//
 
-
+	//wchar_t scoreText04[30];
+	//swprintf(scoreText04, 30, L"몬스터 X 스크롤: %d", abs(iScrollX));
+	//TextOut(g_memDC,
+	//	WINCX / 2 + 200,
+	//	260,
+	//	scoreText04,
+	//	int(wcslen(scoreText04)));
 }
 
 void HW_CMonster::Release()
 {
+}
+
+void HW_CMonster::Jumping()
+{
+	float fY(0.f);
+
+	bool bLineCol = HW_CLineMgr::Get_Instance()->Collision_Line(m_tInfo.vPos.x, &fY);
+
+	if (GetbJump())
+	{
+		m_tInfo.vPos.y -= (20 * sinf(45.f) * GetfTime()) - (9.8f * GetfTime() * GetfTime());
+
+		AddfTime(0.2f);
+
+		if (bLineCol && (fY < m_tInfo.vPos.y))
+		{
+			SetbJump(false);
+			SetfTime(0.f);
+			m_tInfo.vPos.y = fY;
+		}
+	}
+
+	else if (bLineCol)
+	{
+		m_tInfo.vPos.y = fY;
+	}
 }

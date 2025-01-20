@@ -13,7 +13,8 @@
 #include "ColliderMgr.h"
 #include "SceneMgr.h"
 
-CScene_RUNRUN::CScene_RUNRUN() : m_pBG2(nullptr), m_iBG1(0), m_iBG2(800)
+
+CScene_RUNRUN::CScene_RUNRUN() : m_pBG2(nullptr), m_iBG1(0), m_iBG2(800), m_iPoint(0), m_bGameOver(false)
 {
 	m_pBG = CResMgr::GetInst()->LoadTexture
 	(L"Jump", L"./\\Content\\Textures\\BG\\JumpJump.bmp");
@@ -38,22 +39,19 @@ void CScene_RUNRUN::Enter()
 {
 	m_bChangeScene = false;
 	m_fFade = 1.0f;
-
-	HW_CLineMgr::Get_Instance()->Initialize();
-
-	for (int i = 0; i < 10; ++i)
+	
+	for (int i = 0; i < 100; ++i)
 	{
 		HW_CMonster* pMonster = new HW_CMonster;
 		pMonster->Initialize();
-		pMonster->SetPosVector(100 * i + 400, 420.f);
+		pMonster->SetPosVector(800 * i + 500, 420.f);
 		Create_Object(pMonster, eObjectType::MONSTER);
-	
 	}
 	
+	HW_CLineMgr::Get_Instance()->Initialize();	
 	HW_CPlayer* pPlayer = new HW_CPlayer;
 	pPlayer->Initialize();
 	Create_Object(pPlayer, eObjectType::PLAYER);
-
 }
 
 void CScene_RUNRUN::Exit()
@@ -70,20 +68,19 @@ void CScene_RUNRUN::Update()
 		g_fVolume += 0.15f;
 		CSoundMgr::GetInst()->SetChannelVolume(SOUND_BGM, g_fVolume);
 	}
-
 	CScene::Update();
 
-	
 	if(0 != GetvSceneObj()[(ULONG)eObjectType::MONSTER].size())
-		CColliderMgr::GetInst()->HW_CollisionCircle(GetvSceneObj()[(ULONG)eObjectType::PLAYER].front(), GetvSceneObj()[(ULONG)eObjectType::MONSTER].front());
+		CColliderMgr::GetInst()->HW_CollisionCircle(GetvSceneObj()[(ULONG)eObjectType::PLAYER].front(), GetvSceneObj()[(ULONG)eObjectType::MONSTER]);
 
 
-	if (nullptr == CSceneMgr::GetInst()->GetPlayer())
+	if (Get_GameOver())
 	{
-		//CObject* pPlayer = new HW_CPlayer;
-		//pPlayer->Initialize();
-		//Create_Object(pPlayer, eObjectType::PLAYER);
-		//return;
+		Set_Point(0);
+	}
+	else
+	{
+		Set_Point(abs((int)CScrollMgr::Get_Instance()->Get_ScrollX()));
 	}
 
 	#pragma region 씬 전환
@@ -154,9 +151,20 @@ void CScene_RUNRUN::Render()
 
 
 	HW_CLineMgr::Get_Instance()->Render();
-
-
 	CScene::Render();
+
+	SetBkMode(g_memDC, TRANSPARENT); // 배경을 투명하게 설정
+	SetTextColor(g_memDC, RGB(255, 0, 140)); // 텍스트 색상
+	//int		iScrollX = (int)CScrollMgr::Get_Instance()->Get_ScrollX();
+	//Set_Point(abs((int)CScrollMgr::Get_Instance()->Get_ScrollX()));
+
+	wchar_t scoreText04[30];
+	swprintf(scoreText04, 30, L"포인트: %d", Get_Point());
+	TextOut(g_memDC,
+		WINCX / 2 + 200,
+		10,
+		scoreText04,
+		int(wcslen(scoreText04)));
 
 	if (0 < m_fFade)
 		AlphaBlend(m_pBlack, m_fFade);

@@ -21,6 +21,7 @@
 #include "HW_CPlayer.h"
 #include "HW_CMonster.h"
 #include "KeyMgr.h"
+#include "Scene_RUNRUN.h"
 
 CColliderMgr::CColliderMgr() : m_Gravity(9.8f), m_fTime(0), m_bEffectCreated(false), m_bPlayerDead(false),
 m_bJumpLimit(false), m_bSound(false), m_SoundStart(0), m_bCollisionCooldown(true)
@@ -135,54 +136,79 @@ void CColliderMgr::KL_CollisionCircle(CObject* _Src, vector<CObject*> _Dst)
 }
 
 
-void CColliderMgr::HW_CollisionCircle(CObject* _Src, CObject* _Dst)
+void CColliderMgr::HW_CollisionCircle(CObject* _Src, vector<CObject*> _Dst)
 {
 	D3DXVECTOR3 collisionDir;
 
-	if (HW_CheckCircleEx(_Src, _Dst, &collisionDir))
+	for (auto& Dst : _Dst)
 	{
-		// 충돌 시 이벤트
-		// 
-		// #01. 플레이어 사망
-		//CSceneMgr::GetInst()->GetCurScene()->DeletePlayerGroup();
-
-
 		//# 플레이어 좌표
 		float fPlayerX = static_cast<HW_CPlayer*>(_Src)->GetInfo().vPos.x;
 		float fPlayerY = static_cast<HW_CPlayer*>(_Src)->GetInfo().vPos.y;
 
 		//# 몬스터 좌표
-		float fMosterX = static_cast<HW_CMonster*>(_Dst)->GetInfo().vPos.x;
-		float fMonsterY = static_cast<HW_CMonster*>(_Dst)->GetInfo().vPos.y;
+		float fMosterX = static_cast<HW_CMonster*>(Dst)->GetInfo().vPos.x;
+		float fMonsterY = static_cast<HW_CMonster*>(Dst)->GetInfo().vPos.y;
 
-	
-		// 좌 충돌
-		if (fPlayerX < fMosterX)
+		if (HW_CheckCircleEx(_Src, Dst, &collisionDir))
 		{
+			// 충돌 시 이벤트
+			// #01. 플레이어 사망
 			//CSceneMgr::GetInst()->GetCurScene()->DeletePlayerGroup();
 
-		}
-		// 우 충돌 (우 충돌은 없음)
-		/*if (fPlayerX > fMosterX)
-		{
-
-		}*/
-
-		// 상 충돌
-		if (fPlayerY < fMonsterY)
-		{
-			CSceneMgr::GetInst()->GetCurScene()->DeleteGroup(eObjectType::MONSTER);
-			//_Dst->SetbArrive(false);
-		
-			static_cast<HW_CPlayer*>(_Src)->SetbDoubleJump(true);
-			
-			int JumpCount = static_cast<HW_CPlayer*>(_Src)->Get_JumpCount();
-
-			if (JumpCount < 3)
+			// 좌 충돌
+			if (fPlayerX < fMosterX)
 			{
-				static_cast<HW_CPlayer*>(_Src)->Set_JumpCount(++JumpCount);
+				static_cast<CScene_RUNRUN*>(CSceneMgr::GetInst()->GetCurScene())->Set_Point(0);
+			
+				_Src->SetPosVector(abs((int)CScrollMgr::Get_Instance()->Get_ScrollX()),  200.f);
+				
+				static_cast<CScene_RUNRUN*>(CSceneMgr::GetInst()->GetCurScene())->Set_GameOver(true);
+
+			}
+			// 상 충돌
+			if (fPlayerY < fMonsterY)
+			{
+				Dst->SetbArrive(false);
+
+				int JumpCount = static_cast<HW_CPlayer*>(_Src)->Get_JumpCount();
+
+				if (JumpCount < 5)
+				{
+					static_cast<HW_CPlayer*>(_Src)->Set_JumpCount(++JumpCount);
+				}
+
+				break;
+			}
+		}
+		else
+		{
+	
+			if (fMosterX < fPlayerX && fPlayerX - fMosterX > 500)
+			{
+				Dst->SetbArrive(false);
 			}
 
+
+			if (abs((int)CScrollMgr::Get_Instance()->Get_ScrollX()) > 2000)
+			{
+				bool bInitialized = false;
+				if (!bInitialized)
+				{
+					srand(static_cast<unsigned int>(time(nullptr)));
+					bInitialized = true;
+				}
+
+				if (fMosterX > fPlayerX && fMosterX - fPlayerX < 100)
+				{
+					if (rand() % 100 < 50)
+					{
+						Dst->SetbJump(true);
+						static_cast<HW_CMonster*>(Dst)->Jumping();
+					}
+				
+				}
+			}
 		}
 	}
 }
